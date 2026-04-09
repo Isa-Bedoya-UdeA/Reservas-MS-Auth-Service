@@ -1,12 +1,12 @@
-# Etapa de construcción
-FROM maven:latest AS build
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn clean package -DskipTests -Dmaven.compiler.release=17
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-# Copia el JAR de la etapa 'build' a la etapa actual
 COPY --from=build /app/target/reservas-ms-auth-service.jar reservas-ms-auth-service.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","reservas-ms-auth-service.jar"]
+EXPOSE 8081
+ENTRYPOINT ["java", "-jar", "reservas-ms-auth-service.jar"]
