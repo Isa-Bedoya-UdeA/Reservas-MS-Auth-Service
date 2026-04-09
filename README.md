@@ -10,7 +10,7 @@
 
 ## Descripción
 
-CodeF@ctory - Caso 15 - Plataforma de Reservas de Servicios - Microservicio de Autenticación y Usuarios
+CodeF@ctory - Caso 15 - Plataforma de Reservas de Servicios - Microservicio de Autenticación y Usuarios.
 
 ## Responsabilidad
 
