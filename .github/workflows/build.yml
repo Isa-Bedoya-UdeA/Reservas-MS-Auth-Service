@@ -109,12 +109,12 @@ jobs:
           #Set artifact name
           name: artifact
           #From this path
-          path: target/Reservas-MS-Auth-Service.jar
+          path: target/reservas-ms-auth-service.jar
 
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
-          image: isabedoya/Reservas-MS-Auth-Service
+          image: isabedoya/reservas-ms-auth-service
           tags: latest
           registry: docker.io
           dockerfile: Dockerfile
