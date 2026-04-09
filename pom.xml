@@ -223,6 +223,6 @@
             </plugin>
         </plugins>
 
-        <finalName>Reservas-MS-Auth-Service</finalName>
+        <finalName>reservas-ms-auth-service</finalName>
     </build>
 </project>
