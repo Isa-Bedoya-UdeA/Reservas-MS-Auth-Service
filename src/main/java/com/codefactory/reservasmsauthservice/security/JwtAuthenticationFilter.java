@@ -1,6 +1,8 @@
 package com.codefactory.reservasmsauthservice.security;
 
-import com.codefactory.reservasmsauthservice.service.JwtService;
+import com.codefactory.reservasmsauthservice.exception.TokenException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +21,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtro de autenticación JWT.
+ * Extrae el token del header Authorization, valida su firma y contenido,
+ * y establece el usuario autenticado en el contexto de seguridad.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -38,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.debug("No JWT token found in request: {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
@@ -61,11 +69,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    logger.debug("JWT Token authenticated for user: {}", userEmail);
+                } else {
+                    logger.warn("JWT token validation failed for user: {}", userEmail);
                 }
             }
+        } catch (ExpiredJwtException e) {
+            logger.warn("JWT Token expired: {}", e.getMessage());
+        } catch (JwtException e) {
+            logger.warn("JWT Token invalid or malformed: {}", e.getMessage());
         } catch (Exception e) {
-            // Token inválido o expirado - se continúa sin autenticación
-            logger.debug("Token validation failed: {}", e.getMessage());
+            logger.error("Unexpected error during JWT authentication", e);
         }
 
         filterChain.doFilter(request, response);

@@ -1,6 +1,6 @@
-package com.codefactory.reservasmsauthservice.service.impl;
+package com.codefactory.reservasmsauthservice.security.impl;
 
-import com.codefactory.reservasmsauthservice.service.JwtService;
+import com.codefactory.reservasmsauthservice.security.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

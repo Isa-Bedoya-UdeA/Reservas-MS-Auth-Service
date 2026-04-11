@@ -1,4 +1,44 @@
 package com.codefactory.reservasmsauthservice.service.impl;
 
-public class ClientServiceImpl {
+import com.codefactory.reservasmsauthservice.dto.request.CreateClientRequestDTO;
+import com.codefactory.reservasmsauthservice.dto.response.ClientResponseDTO;
+import com.codefactory.reservasmsauthservice.entity.Client;
+import com.codefactory.reservasmsauthservice.entity.User;
+import com.codefactory.reservasmsauthservice.exception.ResourceNotFoundException;
+import com.codefactory.reservasmsauthservice.mapper.ClientMapper;
+import com.codefactory.reservasmsauthservice.repository.ClientRepository;
+import com.codefactory.reservasmsauthservice.service.ClientService;
+import com.codefactory.reservasmsauthservice.service.UserAuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class ClientServiceImpl implements ClientService {
+
+    private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
+    private final UserAuthService userAuthService;
+
+    @Override
+    @Transactional
+    public ClientResponseDTO createClient(CreateClientRequestDTO request) {
+        // Validar email y contraseña (centralizado en UserAuthService)
+        userAuthService.validateEmailAndPassword(request.getEmail(), request.getPassword());
+
+        Client client = clientMapper.toEntity(request);
+        // Codificar contraseña (centralizado en UserAuthService)
+        client.setPasswordHash(userAuthService.encodePassword(request.getPassword()));
+        
+        Client savedClient = clientRepository.save(client);
+        return clientMapper.toDto(savedClient);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getUserEntityByEmail(String email) {
+        return clientRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con email '" + email + "' no encontrado"));
+    }
 }

@@ -1,4 +1,4 @@
-package com.codefactory.reservasmsauthservice.service;
+package com.codefactory.reservasmsauthservice.security;
 
 import io.jsonwebtoken.Claims;
 import java.util.function.Function;
