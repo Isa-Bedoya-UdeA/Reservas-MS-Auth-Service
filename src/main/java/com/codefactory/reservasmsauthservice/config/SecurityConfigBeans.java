@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /**
  * Configuración de beans de seguridad.
  * Define AuthenticationProvider, AuthenticationManager y PasswordEncoder.
+ * Estos beans no pertenecen a JwtConfig ya que no están directamente relacionados a JWT.
  */
 @Configuration
 @RequiredArgsConstructor
