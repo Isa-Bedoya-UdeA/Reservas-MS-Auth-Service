@@ -1,6 +1,5 @@
 package com.codefactory.reservasmsauthservice.security;
 
-import com.codefactory.reservasmsauthservice.exception.TokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;

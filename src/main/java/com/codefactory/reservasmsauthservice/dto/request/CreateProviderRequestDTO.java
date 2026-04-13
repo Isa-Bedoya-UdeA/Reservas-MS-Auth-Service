@@ -2,6 +2,7 @@ package com.codefactory.reservasmsauthservice.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import java.util.UUID;
@@ -14,14 +15,14 @@ public class CreateProviderRequestDTO {
     private String email;
 
     @NotBlank(message = "La contraseña no puede estar vacía")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", 
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
              message = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número")
     private String password;
 
     @NotBlank(message = "El nombre comercial no puede estar vacío")
     private String nombreComercial;
 
-    // Optional for now
+    @NotNull(message = "La categoría es obligatoria")
     private UUID idCategoria;
 
     @NotBlank(message = "La dirección no puede estar vacía")
