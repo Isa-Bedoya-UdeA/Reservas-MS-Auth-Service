@@ -187,9 +187,8 @@ Reservas-MS-Auth-Service/
 [docs/sequence.png]
 (Pendiente)
 
-### Diagrama ER (Entidad-Relación)
-[docs/er-diagram.png]
-(Pendiente)
+### Diagrama MER Lógico
+![MER Lógico](docs/mer-diagram.png)
 
 ### ADRs (Architecture Decision Records)
 [docs/adrs/]
