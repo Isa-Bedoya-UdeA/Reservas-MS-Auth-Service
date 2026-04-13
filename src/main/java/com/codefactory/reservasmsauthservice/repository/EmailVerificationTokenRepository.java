@@ -22,7 +22,7 @@ public interface EmailVerificationTokenRepository extends JpaRepository<EmailVer
      * @param token Valor del token
      * @return Optional con el token si existe y es válido
      */
-    @Query("SELECT evt FROM EmailVerificationToken evt WHERE evt.token = :token AND evt.used = false AND evt.expiryDate > CURRENT_TIMESTAMP")
+    @Query("SELECT evt FROM EmailVerificationToken evt WHERE evt.token = :token AND evt.usado = false AND evt.fechaExpiracion > CURRENT_TIMESTAMP")
     Optional<EmailVerificationToken> findValidByToken(@Param("token") String token);
     
     /**
@@ -37,7 +37,7 @@ public interface EmailVerificationTokenRepository extends JpaRepository<EmailVer
      * @param userId ID del usuario
      * @return Optional con el token no utilizado si existe
      */
-    Optional<EmailVerificationToken> findByUser_IdUsuarioAndUsedFalse(UUID userId);
+    Optional<EmailVerificationToken> findByUser_IdUsuarioAndUsadoFalse(UUID userId);
     
     /**
      * Elimina todos los tokens de verificación de un usuario.
@@ -47,7 +47,7 @@ public interface EmailVerificationTokenRepository extends JpaRepository<EmailVer
     
     /**
      * Elimina tokens expirados y no utilizados.
-     * @param expiryDate Fecha límite de expiración
+     * @param fechaExpiracion Fecha límite de expiración
      */
-    void deleteByExpiryDateBeforeAndUsedFalse(LocalDateTime expiryDate);
+    void deleteByFechaExpiracionBeforeAndUsadoFalse(LocalDateTime fechaExpiracion);
 }

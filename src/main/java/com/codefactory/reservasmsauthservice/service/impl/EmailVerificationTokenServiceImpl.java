@@ -69,7 +69,7 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
     @Override
     @Transactional(readOnly = true)
     public EmailVerificationToken getActiveTokenByUserId(UUID userId) {
-        return tokenRepository.findByUser_IdUsuarioAndUsedFalse(userId)
+        return tokenRepository.findByUser_IdUsuarioAndUsadoFalse(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró un token de verificación activo para el usuario"));
     }
 
