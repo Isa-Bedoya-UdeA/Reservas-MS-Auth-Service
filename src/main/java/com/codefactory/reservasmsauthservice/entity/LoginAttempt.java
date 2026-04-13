@@ -12,34 +12,43 @@ import java.util.UUID;
  * de cuenta después de múltiples intentos fallidos.
  */
 @Entity
-@Table(name = "login_attempt")
+@Table(name = "intento_login")
 @Getter
 @Setter
 public class LoginAttempt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_attempt", columnDefinition = "UUID")
+    @Column(name = "id_intento", columnDefinition = "UUID")
     private UUID idAttempt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private User user;
 
-    @Column(name = "ip_address", columnDefinition = "VARCHAR(45)")
+    @Column(name = "direccion_ip", nullable = false, columnDefinition = "VARCHAR(45)")
     private String ipAddress;
 
-    @Column(name = "user_agent", columnDefinition = "VARCHAR(500)")
+    @Column(name = "info_dispositivo", columnDefinition = "VARCHAR(255)")
     private String userAgent;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean exitoso = false;
+
+    @Column(name = "mensaje_error", columnDefinition = "VARCHAR(200)")
+    private String errorMessage;
+
+    @Column(name = "fecha_hora", nullable = false)
+    private LocalDateTime fechaHora;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
+        if (fechaHora == null) {
+            fechaHora = LocalDateTime.now();
+        }
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }

@@ -38,7 +38,7 @@ public class User {
     private LocalDateTime fechaRegistro;
 
     @Column(nullable = false, columnDefinition = "varchar(255)")
-    private String estado = "activo";
+    private String estado = "ACTIVO";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_usuario", nullable = false)

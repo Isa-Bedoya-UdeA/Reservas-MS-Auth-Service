@@ -12,28 +12,37 @@ import java.util.UUID;
  * y debe ser validado antes de poder establecer una nueva contraseña.
  */
 @Entity
-@Table(name = "password_reset_token")
+@Table(name = "token_reset_password")
 @Getter
 @Setter
 public class PasswordResetToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id_reset_token", columnDefinition = "UUID")
+    @Column(name = "id_token", columnDefinition = "UUID")
     private UUID idResetToken;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private User user;
 
-    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(500)")
+    @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(255)")
     private String token;
 
-    @Column(name = "expiry_date", nullable = false)
+    @Column(name = "fecha_expiracion", nullable = false)
     private LocalDateTime expiryDate;
 
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean usado = false;
+
+    @Column(name = "fecha_uso")
+    private LocalDateTime fechaUso;
+
+    @Column(name = "direccion_ip_solicitud", nullable = false, columnDefinition = "VARCHAR(45)")
+    private String ipAddress;
+
+    @Column(name = "fecha_creacion", nullable = false)
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -42,6 +51,9 @@ public class PasswordResetToken {
     protected void onCreate() {
         if (expiryDate == null) {
             expiryDate = LocalDateTime.now().plusHours(24);
+        }
+        if (fechaCreacion == null) {
+            fechaCreacion = LocalDateTime.now();
         }
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
