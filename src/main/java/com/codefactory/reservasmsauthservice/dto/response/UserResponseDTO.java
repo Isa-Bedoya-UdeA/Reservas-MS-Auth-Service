@@ -9,6 +9,6 @@ public class UserResponseDTO {
     private UUID idUsuario;
     private String email;
     private String tipoUsuario;
-    private Boolean estado;
+    private String estado;
     private LocalDateTime fechaRegistro;
 }
