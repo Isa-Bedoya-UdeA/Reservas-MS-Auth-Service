@@ -31,13 +31,13 @@ public class EmailVerificationToken {
     @Column(nullable = false, unique = true, columnDefinition = "VARCHAR(500)")
     private String token;
     
-    @Column(name = "fecha_expiracion", nullable = false, columnDefinition = "TIMESTAMPTZ")
+    @Column(name = "fecha_expiracion", nullable = false)
     private LocalDateTime fechaExpiracion;
     
     @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean usado = false;
     
-    @Column(name = "created_at", columnDefinition = "TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
     
     @PrePersist
