@@ -38,8 +38,8 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
         EmailVerificationToken token = new EmailVerificationToken();
         token.setUser(user);
         token.setToken(tokenValue);
-        token.setExpiryDate(LocalDateTime.now().plusHours(TOKEN_EXPIRY_HOURS));
-        token.setUsed(false);
+        token.setFechaExpiracion(LocalDateTime.now().plusHours(TOKEN_EXPIRY_HOURS));
+        token.setUsado(false);
         
         tokenRepository.save(token);
         return tokenValue;
@@ -57,25 +57,25 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
     public boolean confirmToken(String token) {
         EmailVerificationToken verificationToken = validateToken(token);
         
-        if (verificationToken.getUsed()) {
+        if (verificationToken.getUsado()) {
             throw new TokenException("El token de verificación ya ha sido utilizado");
         }
         
-        verificationToken.setUsed(true);
+        verificationToken.setUsado(true);
         tokenRepository.save(verificationToken);
         return true;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public EmailVerificationToken getActiveTokenByUserId(Long userId) {
+    public EmailVerificationToken getActiveTokenByUserId(UUID userId) {
         return tokenRepository.findByUser_IdUsuarioAndUsedFalse(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró un token de verificación activo para el usuario"));
     }
 
     @Override
     @Transactional
-    public void deleteTokensByUserId(Long userId) {
+    public void deleteTokensByUserId(UUID userId) {
         tokenRepository.deleteByUser_IdUsuario(userId);
     }
 }

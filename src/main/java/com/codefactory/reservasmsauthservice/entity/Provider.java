@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "proveedor")
 @PrimaryKeyJoinColumn(name = "id_usuario")
@@ -17,9 +19,9 @@ public class Provider extends User {
     @Column(name = "nombre_comercial", nullable = false)
     private String nombreComercial;
 
-    // TODO: Create CATEGORIA_SERVICIO entity and add mapping
-    @Column(name = "id_categoria")
-    private Long idCategoria;
+    // FK lógica a MS-CATALOG-SERVICE (validada vía OpenFeign)
+    @Column(name = "id_categoria", columnDefinition = "UUID")
+    private UUID idCategoria;
 
     @Column(nullable = false)
     private String direccion;

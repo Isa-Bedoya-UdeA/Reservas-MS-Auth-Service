@@ -8,13 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Repositorio para EmailVerificationToken.
  * Gestiona operaciones CRUD y consultas específicas de tokens de verificación.
  */
 @Repository
-public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, Long> {
+public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, UUID> {
     
     /**
      * Busca un token de verificación no expirado y no utilizado por su valor.
@@ -36,13 +37,13 @@ public interface EmailVerificationTokenRepository extends JpaRepository<EmailVer
      * @param userId ID del usuario
      * @return Optional con el token no utilizado si existe
      */
-    Optional<EmailVerificationToken> findByUser_IdUsuarioAndUsedFalse(Long userId);
+    Optional<EmailVerificationToken> findByUser_IdUsuarioAndUsedFalse(UUID userId);
     
     /**
      * Elimina todos los tokens de verificación de un usuario.
      * @param userId ID del usuario
      */
-    void deleteByUser_IdUsuario(Long userId);
+    void deleteByUser_IdUsuario(UUID userId);
     
     /**
      * Elimina tokens expirados y no utilizados.

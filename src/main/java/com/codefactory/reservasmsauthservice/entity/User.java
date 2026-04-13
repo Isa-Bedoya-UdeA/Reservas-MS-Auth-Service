@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "usuario")
@@ -14,9 +15,9 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Long idUsuario;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id_usuario", columnDefinition = "UUID")
+    private UUID idUsuario;
 
     @Column(unique = true, nullable = false)
     private String email;

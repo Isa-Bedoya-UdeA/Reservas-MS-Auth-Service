@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.UUID;
 
 /**
  * DTO de respuesta para registro de usuarios.
@@ -42,5 +43,5 @@ public class RegistrationResponseDTO {
     /**
      * ID del usuario registrado.
      */
-    private Long userId;
+    private UUID userId;
 }

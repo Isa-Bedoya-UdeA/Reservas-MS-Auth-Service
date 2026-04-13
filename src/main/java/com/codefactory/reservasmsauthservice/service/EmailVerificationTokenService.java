@@ -2,6 +2,7 @@ package com.codefactory.reservasmsauthservice.service;
 
 import com.codefactory.reservasmsauthservice.entity.EmailVerificationToken;
 import com.codefactory.reservasmsauthservice.entity.User;
+import java.util.UUID;
 
 /**
  * Servicio para gestionar tokens de verificación de email.
@@ -36,11 +37,11 @@ public interface EmailVerificationTokenService {
      * @param userId ID del usuario
      * @return Token si existe, lanza excepción si no
      */
-    EmailVerificationToken getActiveTokenByUserId(Long userId);
+    EmailVerificationToken getActiveTokenByUserId(UUID userId);
     
     /**
      * Elimina todos los tokens de verificación de un usuario.
      * @param userId ID del usuario
      */
-    void deleteTokensByUserId(Long userId);
+    void deleteTokensByUserId(UUID userId);
 }

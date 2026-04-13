@@ -3,7 +3,6 @@ package com.codefactory.reservasmsauthservice.mapper;
 import com.codefactory.reservasmsauthservice.dto.request.CreateProviderRequestDTO;
 import com.codefactory.reservasmsauthservice.dto.response.ProviderResponseDTO;
 import com.codefactory.reservasmsauthservice.entity.Provider;
-import com.codefactory.reservasmsauthservice.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -2,10 +2,11 @@ package com.codefactory.reservasmsauthservice.dto.response;
 
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class UserResponseDTO {
-    private Long idUsuario;
+    private UUID idUsuario;
     private String email;
     private String tipoUsuario;
     private Boolean estado;

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.UUID;
 
 /**
  * DTO de respuesta para verificación de email exitosa.
@@ -19,6 +20,6 @@ public class VerificationResponseDTO {
     
     private Boolean success;
     private String message;
-    private Long userId;
+    private UUID userId;
     private String email;
 }

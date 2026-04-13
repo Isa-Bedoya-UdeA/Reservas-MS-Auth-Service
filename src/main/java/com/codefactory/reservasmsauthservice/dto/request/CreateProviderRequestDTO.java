@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import java.util.UUID;
 
 @Data
 public class CreateProviderRequestDTO {
@@ -21,7 +22,7 @@ public class CreateProviderRequestDTO {
     private String nombreComercial;
 
     // Optional for now
-    private Long idCategoria;
+    private UUID idCategoria;
 
     @NotBlank(message = "La dirección no puede estar vacía")
     private String direccion;
