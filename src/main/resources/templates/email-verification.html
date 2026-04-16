@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifica tu correo electrónico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #007bff;
+        }
+        .header h1 {
+            color: #007bff;
+            margin: 0;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .content h2 {
+            color: #333;
+        }
+        .content p {
+            margin-bottom: 15px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 th:text="${appName}">Plataforma de Reservas</h1>
+        </div>
+        
+        <div class="content">
+            <h2>¡Hola, <span th:text="${name}">Usuario</span>!</h2>
+            
+            <p>Gracias por registrarte en <strong th:text="${appName}">nuestra plataforma</strong>. Estamos emocionados de tenerte con nosotros.</p>
+            
+            <p>Para activar tu cuenta y poder comenzar a usar todos nuestros servicios, por favor verifica tu correo electrónico haciendo clic en el siguiente botón:</p>
+            
+            <a th:href="${verificationUrl}" class="button">Activar Cuenta</a>
+            
+            <div class="warning">
+                <p><strong>Importante:</strong> Este enlace expira en 24 horas. Si no activas tu cuenta dentro de este período, deberás solicitar un nuevo enlace de verificación.</p>
+            </div>
+            
+            <p>Si no solicitaste este registro, puedes ignorar este correo de forma segura.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
+            <p th:text="'© ' + ${#temporals.format(#temporals.now(), 'yyyy')} + ' ' + ${appName}">© 2026 Plataforma de Reservas</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -7,6 +7,7 @@ import com.codefactory.reservasmsauthservice.dto.response.ClientResponseDTO;
 import com.codefactory.reservasmsauthservice.dto.response.ProviderResponseDTO;
 import com.codefactory.reservasmsauthservice.service.AuthService;
 import com.codefactory.reservasmsauthservice.service.ClientService;
+import com.codefactory.reservasmsauthservice.service.EmailService;
 import com.codefactory.reservasmsauthservice.service.EmailVerificationTokenService;
 import com.codefactory.reservasmsauthservice.service.ProviderService;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +25,22 @@ public class AuthServiceImpl implements AuthService {
     private final ClientService clientService;
     private final ProviderService providerService;
     private final EmailVerificationTokenService emailVerificationTokenService;
+    private final EmailService emailService;
 
     @Override
     @Transactional
     public RegistrationResponseDTO registerClient(CreateClientRequestDTO request) {
         // Crear cliente
         ClientResponseDTO client = clientService.createClient(request);
-        
+
         // Generar token de verificación de email
         String verificationToken = emailVerificationTokenService.generateToken(
             clientService.getUserEntityByEmail(client.getEmail())
         );
-        
+
+        // Enviar email de verificación
+        emailService.sendVerificationEmail(client.getEmail(), client.getNombre(), verificationToken);
+
         return RegistrationResponseDTO.builder()
                 .verificationToken(verificationToken)
                 .email(client.getEmail())
@@ -50,12 +55,15 @@ public class AuthServiceImpl implements AuthService {
     public RegistrationResponseDTO registerProvider(CreateProviderRequestDTO request) {
         // Crear proveedor
         ProviderResponseDTO provider = providerService.createProvider(request);
-        
+
         // Generar token de verificación de email
         String verificationToken = emailVerificationTokenService.generateToken(
             providerService.getUserEntityByEmail(provider.getEmail())
         );
-        
+
+        // Enviar email de verificación
+        emailService.sendVerificationEmail(provider.getEmail(), provider.getNombreComercial(), verificationToken);
+
         return RegistrationResponseDTO.builder()
                 .verificationToken(verificationToken)
                 .email(provider.getEmail())
