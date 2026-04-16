@@ -19,10 +19,10 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.access-expiration}")
     private long jwtExpiration;
 
-    @Value("${jwt.refresh-expiration:604800000}")
+    @Value("${jwt.refresh-expiration}")
     private long refreshExpiration;
 
     // === GENERACIÓN DE TOKENS (SOLO AUTH) ===

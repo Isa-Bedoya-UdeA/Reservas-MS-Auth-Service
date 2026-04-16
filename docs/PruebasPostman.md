@@ -1,13 +1,30 @@
 # Pruebas en Postman
 
-> Importante: El `Content-Type` de las peticiones debe ser `application/json`.
+## Registro de Usuarios
 
-## Registrar Cliente Exitoso
+### Descripción
 
-```http
-POST http://localhost:8081/api/auth/register/client
+El sistema de registro permite crear nuevos usuarios tanto como clientes como proveedores. Los clientes pueden reservar servicios, mientras que los proveedores pueden ofrecer servicios. Ambos tipos de usuarios deben verificar su email antes de poder iniciar sesión.
+
+**Características importantes:**
+- **Validación de datos:** Se valida el formato de email, complejidad de contraseña, y otros campos obligatorios.
+- **Email único:** No se permite registrar dos usuarios con el mismo email.
+- **Categorías para proveedores:** Los proveedores deben asociarse a una categoría activa del servicio de catálogo.
+- **Verificación de email obligatoria:** Después del registro, se envía un email de verificación que debe confirmarse antes de iniciar sesión.
+
+### Endpoints de Registro
+
+## 1. Registrar Cliente Exitoso
+
+**Nombre:** Register Client - Success
+**URL:** `http://localhost:8081/api/auth/register/client`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "cliente@email.com",
     "password": "Password123",
@@ -15,8 +32,8 @@ Content-Type: application/json
     "telefono": "3211234567"
 }
 ```
-
-**Respuesta esperada (201 Created):**
+**Código esperado:** 201 Created
+**Response esperado:**
 ```json
 {
     "message": "Usuario registrado exitosamente. Por favor verifica tu email.",
@@ -24,12 +41,17 @@ Content-Type: application/json
 }
 ```
 
-## Registrar Cliente con Datos Inválidos
+## 2. Registrar Cliente con Datos Inválidos
 
-```http
-POST http://localhost:8081/api/auth/register/client
+**Nombre:** Register Client - Invalid Data
+**URL:** `http://localhost:8081/api/auth/register/client`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "email-invalido",
     "password": "123",
@@ -37,8 +59,8 @@ Content-Type: application/json
     "telefono": "abc"
 }
 ```
-
-**Respuesta esperada (400 Bad Request):**
+**Código esperado:** 400 Bad Request
+**Response esperado:**
 ```json
 {
     "status": 400,
@@ -53,12 +75,17 @@ Content-Type: application/json
 }
 ```
 
-## Registrar Cliente con Email Ya Existente
+## 3. Registrar Cliente con Email Ya Existente
 
-```http
-POST http://localhost:8081/api/auth/register/client
+**Nombre:** Register Client - Email Already Exists
+**URL:** `http://localhost:8081/api/auth/register/client`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "cliente@email.com",
     "password": "Password123",
@@ -66,8 +93,8 @@ Content-Type: application/json
     "telefono": "3211234567"
 }
 ```
-
-**Respuesta esperada (409 Conflict):**
+**Código esperado:** 409 Conflict
+**Response esperado:**
 ```json
 {
     "status": 409,
@@ -76,12 +103,17 @@ Content-Type: application/json
 }
 ```
 
-## Registrar Proveedor Exitoso
+## 4. Registrar Proveedor Exitoso
 
-```http
-POST http://localhost:8081/api/auth/register/provider
+**Nombre:** Register Provider - Success
+**URL:** `http://localhost:8081/api/auth/register/provider`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "contacto@esteticabelleza.com",
     "password": "Password123",
@@ -91,8 +123,8 @@ Content-Type: application/json
     "idCategoria": "0203c0b2-be07-44c0-8d12-bf9c362d10aa"
 }
 ```
-
-**Respuesta esperada (201 Created):**
+**Código esperado:** 201 Created
+**Response esperado:**
 ```json
 {
     "message": "Usuario registrado exitosamente. Por favor verifica tu email.",
@@ -100,12 +132,17 @@ Content-Type: application/json
 }
 ```
 
-## Registrar Proveedor con UUID Inválido
+## 5. Registrar Proveedor con UUID Inválido
 
-```http
-POST http://localhost:8081/api/auth/register/provider
+**Nombre:** Register Provider - Invalid UUID
+**URL:** `http://localhost:8081/api/auth/register/provider`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "contacto@esteticabelleza.com",
     "password": "Password123",
@@ -115,8 +152,8 @@ Content-Type: application/json
     "idCategoria": "0203c0b2-be07"
 }
 ```
-
-**Respuesta esperada (400 Bad Request):**
+**Código esperado:** 400 Bad Request
+**Response esperado:**
 ```json
 {
     "status": 400,
@@ -125,12 +162,17 @@ Content-Type: application/json
 }
 ```
 
-## Registrar Proveedor con Categoría No Existente
+## 6. Registrar Proveedor con Categoría No Existente
 
-```http
-POST http://localhost:8081/api/auth/register/provider
+**Nombre:** Register Provider - Category Not Found
+**URL:** `http://localhost:8081/api/auth/register/provider`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "contacto@esteticabelleza.com",
     "password": "Password123",
@@ -140,8 +182,8 @@ Content-Type: application/json
     "idCategoria": "0203c0b2-be07-44c0-8d12-bf9c362d10aa"
 }
 ```
-
-**Respuesta esperada (400 Bad Request):**
+**Código esperado:** 400 Bad Request
+**Response esperado:**
 ```json
 {
     "status": 400,
@@ -150,12 +192,17 @@ Content-Type: application/json
 }
 ```
 
-## Registrar Proveedor con Categoría Inactiva
+## 7. Registrar Proveedor con Categoría Inactiva
 
-```http
-POST http://localhost:8081/api/auth/register/provider
+**Nombre:** Register Provider - Category Inactive
+**URL:** `http://localhost:8081/api/auth/register/provider`
+**Método:** POST
+**Headers:**
+```
 Content-Type: application/json
-
+```
+**Body:**
+```json
 {
     "email": "contacto@esteticabelleza.com",
     "password": "Password123",
@@ -165,8 +212,8 @@ Content-Type: application/json
     "idCategoria": "uuid-de-categoria-inactiva"
 }
 ```
-
-**Respuesta esperada (400 Bad Request):**
+**Código esperado:** 400 Bad Request
+**Response esperado:**
 ```json
 {
     "status": 400,
@@ -191,7 +238,7 @@ El sistema de verificación de email asegura que los usuarios confirmen su direc
 
 ### Endpoints de Verificación
 
-## 1. Verificar Email - Token Válido (Éxito)
+## 8. Verificar Email - Token Válido (Éxito)
 
 **Nombre:** Verify Email - Valid Token (Provider)
 **URL:** `http://localhost:8081/api/auth/verify-email`
@@ -219,7 +266,7 @@ Content-Type: application/json
 
 ---
 
-## 2. Verificar Email - Token Inválido (Error)
+## 9. Verificar Email - Token Inválido (Error)
 
 **Nombre:** Verify Email - Invalid Token
 **URL:** `http://localhost:8081/api/auth/verify-email`
@@ -244,7 +291,7 @@ Content-Type: application/json
 
 ---
 
-## 3. Verificar Email - Token Vacío (Validación)
+## 10. Verificar Email - Token Vacío (Validación)
 
 **Nombre:** Verify Email - Empty Token
 **URL:** `http://localhost:8081/api/auth/verify-email`
@@ -269,7 +316,7 @@ Content-Type: application/json
 
 ---
 
-## 4. Verificar Email - Token Vencido (Error)
+## 11. Verificar Email - Token Vencido (Error)
 
 **Nombre:** Verify Email - Expired Token (Client)
 **URL:** `http://localhost:8081/api/auth/verify-email`
@@ -294,7 +341,7 @@ Content-Type: application/json
 
 ---
 
-## 5. Reenviar Token - Email No Verificado (Éxito)
+## 12. Reenviar Token - Email No Verificado (Éxito)
 
 **Nombre:** Resend Verification - Unverified Email
 **URL:** `http://localhost:8081/api/auth/resend-verification-email?email=juan.cliente@udea.edu.co`
@@ -318,7 +365,7 @@ Content-Type: application/json
 
 ---
 
-## 6. Reenviar Token - Email Ya Verificado (Info)
+## 13. Reenviar Token - Email Ya Verificado (Info)
 
 **Nombre:** Resend Verification - Already Verified
 **URL:** `http://localhost:8081/api/auth/resend-verification-email?email=soccer@proveedor.com`
@@ -341,7 +388,7 @@ Content-Type: application/json
 
 ---
 
-## 7. Reenviar Token - Email No Existe (Error)
+## 14. Reenviar Token - Email No Existe (Error)
 
 **Nombre:** Resend Verification - Email Not Found
 **URL:** `http://localhost:8081/api/auth/resend-verification-email?email=noexiste@test.com`
@@ -361,7 +408,7 @@ Content-Type: application/json
 
 ---
 
-## 8. Reenviar Token - Email Vacío (Validación)
+## 15. Reenviar Token - Email Vacío (Validación)
 
 **Nombre:** Resend Verification - Missing Email
 **URL:** `http://localhost:8081/api/auth/resend-verification-email`
@@ -381,7 +428,7 @@ Content-Type: application/json
 
 ---
 
-## 9. Verificar Email - Token Ya Usado (Error)
+## 16. Verificar Email - Token Ya Usado (Error)
 
 **Nombre:** Verify Email - Already Used Token
 **URL:** `http://localhost:8081/api/auth/verify-email`
@@ -404,6 +451,440 @@ Content-Type: application/json
 }
 ```
 **Nota:** Esta prueba debe ejecutarse DESPUÉS de la prueba #1 (cuando el token ya fue usado)
+
+---
+
+## Autenticación y Login
+
+### Descripción
+
+El sistema de autenticación implementa login con JWT (JSON Web Tokens), refresh tokens para mantener sesiones activas, y medidas de seguridad como límite de intentos fallidos y bloqueo temporal de cuentas.
+
+**Requisitos previos:**
+- El usuario debe haberse registrado previamente
+- El email del usuario debe estar verificado
+- El usuario debe tener una cuenta activa (no bloqueada)
+
+### Endpoints de Autenticación
+
+## 17. Login Exitoso como Cliente
+
+**Nombre:** Login - Successful Client
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "carlos@email.com",
+    "password": "Password123"
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "role": "CLIENTE",
+    "userId": "uuid-del-usuario",
+    "email": "carlos@email.com"
+}
+```
+
+---
+
+## 18. Login Exitoso como Proveedor
+
+**Nombre:** Login - Successful Provider
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "salon@bellavida.com",
+    "password": "Password123"
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "role": "PROVEEDOR",
+    "userId": "uuid-del-usuario",
+    "email": "salon@bellavida.com"
+}
+```
+
+---
+
+## 19. Login Fallido por Contraseña Incorrecta
+
+**Nombre:** Login - Wrong Password
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "carlos@email.com",
+    "password": "WrongPass"
+}
+```
+**Código esperado:** 401 Unauthorized
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Correo o contraseña incorrectos",
+    "path": "/api/auth/login"
+}
+```
+
+---
+
+## 20. Login con Email No Verificado
+
+**Nombre:** Login - Email Not Verified
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "usuario-no-verificado@email.com",
+    "password": "Password123"
+}
+```
+**Código esperado:** 403 Forbidden
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 403,
+    "error": "Forbidden",
+    "message": "Debes verificar tu email antes de iniciar sesión",
+    "path": "/api/auth/login"
+}
+```
+
+---
+
+## 21. Login con Usuario No Existente
+
+**Nombre:** Login - User Not Found
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "noexiste@email.com",
+    "password": "Password123"
+}
+```
+**Código esperado:** 404 Not Found
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 404,
+    "error": "Not Found",
+    "message": "Usuario con email 'noexiste@email.com' no encontrado",
+    "path": "/api/auth/login"
+}
+```
+
+---
+
+## 22. Login con Datos Vacíos (Validación)
+
+**Nombre:** Login - Empty Credentials
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "",
+    "password": ""
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/login",
+    "validationErrors": {
+        "email": "El email es requerido",
+        "password": "La contraseña es requerida"
+    }
+}
+```
+
+---
+
+## 23. Login con Email Inválido (Validación)
+
+**Nombre:** Login - Invalid Email Format
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "email-invalido",
+    "password": "Password123"
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/login",
+    "validationErrors": {
+        "email": "El email debe tener un formato válido"
+    }
+}
+```
+
+---
+
+## 24. Login con Cuenta Bloqueada
+
+**Nombre:** Login - Account Locked
+**URL:** `http://localhost:8081/api/auth/login`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "carlos@email.com",
+    "password": "Password123"
+}
+```
+**Código esperado:** 423 Locked
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 423,
+    "error": "Locked",
+    "message": "Demasiados intentos fallidos. Tu cuenta está bloqueada por 24 horas. Intenta de nuevo después de 2026-04-17 a las 12:00",
+    "path": "/api/auth/login"
+}
+```
+**Nota:** Esta prueba debe ejecutarse DESPUÉS de 5 intentos fallidos consecutivos con la misma cuenta.
+
+---
+
+## 25. Refresh Token Exitoso
+
+**Nombre:** Refresh Token - Success
+**URL:** `http://localhost:8081/api/auth/refresh`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "role": "CLIENTE",
+    "userId": "uuid-del-usuario",
+    "email": "carlos@email.com"
+}
+```
+**Nota:** El refresh token debe obtenerse de una respuesta de login exitosa. El nuevo refresh token es una rotación del anterior.
+
+---
+
+## 26. Refresh Token Inválido
+
+**Nombre:** Refresh Token - Invalid
+**URL:** `http://localhost:8081/api/auth/refresh`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "refreshToken": "token-invalido"
+}
+```
+**Código esperado:** 401 Unauthorized
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Refresh token inválido o expirado",
+    "path": "/api/auth/refresh"
+}
+```
+
+---
+
+## 27. Refresh Token Vacío (Validación)
+
+**Nombre:** Refresh Token - Empty
+**URL:** `http://localhost:8081/api/auth/refresh`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "refreshToken": ""
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/refresh",
+    "validationErrors": {
+        "refreshToken": "El refresh token es requerido"
+    }
+}
+```
+
+---
+
+## 28. Logout Exitoso
+
+**Nombre:** Logout - Success
+**URL:** `http://localhost:8081/api/auth/logout`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:** (vacío)
+**Nota:** El refresh token debe obtenerse de una respuesta de login exitosa. Después del logout, el token no puede usarse para renovar access tokens.
+
+---
+
+## 29. Logout con Token Inválido
+
+**Nombre:** Logout - Invalid Token
+**URL:** `http://localhost:8081/api/auth/logout`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "refreshToken": "token-invalido"
+}
+```
+**Código esperado:** 401 Unauthorized
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "Refresh token no encontrado",
+    "path": "/api/auth/logout"
+}
+```
+
+---
+
+## 30. Logout con Token Vacío (Validación)
+
+**Nombre:** Logout - Empty Token
+**URL:** `http://localhost:8081/api/auth/logout`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "refreshToken": ""
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T12:00:00",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/logout",
+    "validationErrors": {
+        "refreshToken": "El refresh token es requerido"
+    }
+}
+```
 
 ---
 

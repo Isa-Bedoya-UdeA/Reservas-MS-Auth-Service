@@ -1,7 +1,10 @@
 package com.codefactory.reservasmsauthservice.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,6 +18,9 @@ import java.util.UUID;
 @Table(name = "token_refresh")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RefreshToken {
 
     @Id
@@ -33,7 +39,7 @@ public class RefreshToken {
     private LocalDateTime expiryDate;
 
     @Column(name = "revocado", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean revoked = false;
+    private Boolean revocado = false;
 
     @Column(name = "fecha_revocacion")
     private LocalDateTime fechaRevocacion;
@@ -61,8 +67,8 @@ public class RefreshToken {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
-        if (revoked == null) {
-            revoked = false;
+        if (revocado == null) {
+            revocado = false;
         }
     }
 }

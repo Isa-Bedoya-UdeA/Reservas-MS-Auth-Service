@@ -115,6 +115,38 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(AccountLockedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccountLockedException(
+            AccountLockedException ex, HttpServletRequest request) {
+        logger.warn("Account locked for path: {}", request.getRequestURI());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.LOCKED.value())
+                .error("Locked")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.LOCKED);
+    }
+
+    @ExceptionHandler(EmailNotVerifiedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleEmailNotVerifiedException(
+            EmailNotVerifiedException ex, HttpServletRequest request) {
+        logger.warn("Email not verified for path: {}", request.getRequestURI());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error("Forbidden")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(InvalidVerificationTokenException.class)
     public ResponseEntity<ErrorResponseDTO> handleInvalidVerificationTokenException(
             InvalidVerificationTokenException ex, HttpServletRequest request) {

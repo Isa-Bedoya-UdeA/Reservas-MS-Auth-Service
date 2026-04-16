@@ -22,7 +22,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID
      * @param token Valor del token
      * @return Optional con el token si existe y no está revocado
      */
-    @Query("SELECT rt FROM RefreshToken rt WHERE rt.token = :token AND rt.revoked = false AND rt.expiryDate > CURRENT_TIMESTAMP")
+    @Query("SELECT rt FROM RefreshToken rt WHERE rt.token = :token AND rt.revocado = false AND rt.expiryDate > CURRENT_TIMESTAMP")
     Optional<RefreshToken> findValidByToken(@Param("token") String token);
 
     /**

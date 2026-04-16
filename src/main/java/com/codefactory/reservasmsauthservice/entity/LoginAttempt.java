@@ -1,7 +1,10 @@
 package com.codefactory.reservasmsauthservice.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,6 +18,9 @@ import java.util.UUID;
 @Table(name = "intento_login")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginAttempt {
 
     @Id
