@@ -138,12 +138,17 @@ Reservas-MS-Auth-Service/
 │   │       ├── application.properties
 │   │       ├── application-dev.properties
 │   │       ├── application-prod.properties
-│   │       └── application-test.properties
+│   │       ├── email.properties      # Configuración de email
+│   │       └── templates/           # Plantillas Thymeleaf para emails
+│   │           └── email-verification.html
 │   └── test/
-│       └── java/                    # Tests unitarios y de integración
+│       ├── java/                    # Tests unitarios y de integración
+│       └── resources/
+│           └── application-test.properties
 ├── docs/                            # Diagramas y documentación arquitectónica
 ├── .env.example                     # Plantilla de variables de entorno
 ├── .env                             # Variables de entorno (no versionado)
+├── Dockerfile                       # Configuración de Docker
 ├── pom.xml                          # Configuración de Maven
 └── README.md
 ```
