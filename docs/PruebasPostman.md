@@ -27,7 +27,7 @@ Content-Type: application/json
 ```json
 {
     "email": "cliente@email.com",
-    "password": "Password123",
+    "password": "[CONTRASEÑA_VÁLIDA]",
     "nombre": "Juan Pérez",
     "telefono": "3211234567"
 }
@@ -54,7 +54,7 @@ Content-Type: application/json
 ```json
 {
     "email": "email-invalido",
-    "password": "123",
+    "password": "[CONTRASEÑA_INVÁLIDA]",
     "nombre": "  ",
     "telefono": "abc"
 }
@@ -88,7 +88,7 @@ Content-Type: application/json
 ```json
 {
     "email": "cliente@email.com",
-    "password": "Password123",
+    "password": "[CONTRASEÑA_VÁLIDA]",
     "nombre": "Juan Pérez",
     "telefono": "3211234567"
 }
@@ -116,7 +116,7 @@ Content-Type: application/json
 ```json
 {
     "email": "contacto@esteticabelleza.com",
-    "password": "Password123",
+    "password": "[CONTRASEÑA_VÁLIDA]",
     "nombreComercial": "Estética Belleza",
     "direccion": "Centro",
     "telefonoContacto": "3211234567",
@@ -145,7 +145,7 @@ Content-Type: application/json
 ```json
 {
     "email": "contacto@esteticabelleza.com",
-    "password": "Password123",
+    "password": "[CONTRASEÑA_VÁLIDA]",
     "nombreComercial": "Estética Belleza",
     "direccion": "Centro",
     "telefonoContacto": "3211234567",
@@ -175,7 +175,7 @@ Content-Type: application/json
 ```json
 {
     "email": "contacto@esteticabelleza.com",
-    "password": "Password123",
+    "password": "[CONTRASEÑA_VÁLIDA]",
     "nombreComercial": "Estética Belleza",
     "direccion": "Centro",
     "telefonoContacto": "3211234567",
@@ -205,7 +205,7 @@ Content-Type: application/json
 ```json
 {
     "email": "contacto@esteticabelleza.com",
-    "password": "Password123",
+    "password": "[CONTRASEÑA_VÁLIDA]",
     "nombreComercial": "Estética Belleza",
     "direccion": "Centro",
     "telefonoContacto": "3211234567",
@@ -250,7 +250,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "f145de48-57d2-4236-95e3-7d2b4a0ace65"
+    "token": "[TOKEN_DE_VERIFICACIÓN]"
 }
 ```
 **Código esperado:** 200 OK
@@ -278,7 +278,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "00000000-0000-0000-0000-000000000000"
+    "token": "[TOKEN_INVÁLIDO]"
 }
 ```
 **Código esperado:** 410 Gone
@@ -328,7 +328,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "89dc79f3-6d79-475d-a417-b8784cc0cbe7"
+    "token": "[TOKEN_VENCIDO]"
 }
 ```
 **Código esperado:** 410 Gone
@@ -440,7 +440,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "f145de48-57d2-4236-95e3-7d2b4a0ace65"
+    "token": "[TOKEN_DE_VERIFICACIÓN]"
 }
 ```
 **Código esperado:** 410 Gone
@@ -480,15 +480,15 @@ Content-Type: application/json
 ```json
 {
     "email": "carlos@email.com",
-    "password": "Password123"
+    "password": "[CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 200 OK
 **Response esperado:**
 ```json
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "accessToken": "[ACCESS_TOKEN]",
+    "refreshToken": "[REFRESH_TOKEN]",
     "role": "CLIENTE",
     "userId": "uuid-del-usuario",
     "email": "carlos@email.com"
@@ -510,15 +510,15 @@ Content-Type: application/json
 ```json
 {
     "email": "salon@bellavida.com",
-    "password": "Password123"
+    "password": "[CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 200 OK
 **Response esperado:**
 ```json
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "accessToken": "[ACCESS_TOKEN]",
+    "refreshToken": "[REFRESH_TOKEN]",
     "role": "PROVEEDOR",
     "userId": "uuid-del-usuario",
     "email": "salon@bellavida.com"
@@ -540,7 +540,7 @@ Content-Type: application/json
 ```json
 {
     "email": "carlos@email.com",
-    "password": "WrongPass"
+    "password": "[CONTRASEÑA_INCORRECTA]"
 }
 ```
 **Código esperado:** 401 Unauthorized
@@ -570,7 +570,7 @@ Content-Type: application/json
 ```json
 {
     "email": "usuario-no-verificado@email.com",
-    "password": "Password123"
+    "password": "[CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 403 Forbidden
@@ -600,7 +600,7 @@ Content-Type: application/json
 ```json
 {
     "email": "noexiste@email.com",
-    "password": "Password123"
+    "password": "[CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 404 Not Found
@@ -664,7 +664,7 @@ Content-Type: application/json
 ```json
 {
     "email": "email-invalido",
-    "password": "Password123"
+    "password": "[CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 400 Bad Request
@@ -697,7 +697,7 @@ Content-Type: application/json
 ```json
 {
     "email": "carlos@email.com",
-    "password": "Password123"
+    "password": "[CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 423 Locked
@@ -727,15 +727,15 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "refreshToken": "[REFRESH_TOKEN]"
 }
 ```
 **Código esperado:** 200 OK
 **Response esperado:**
 ```json
 {
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "accessToken": "[ACCESS_TOKEN]",
+    "refreshToken": "[REFRESH_TOKEN]",
     "role": "CLIENTE",
     "userId": "uuid-del-usuario",
     "email": "carlos@email.com"
@@ -757,7 +757,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "refreshToken": "token-invalido"
+    "refreshToken": "[TOKEN_INVÁLIDO]"
 }
 ```
 **Código esperado:** 401 Unauthorized
@@ -818,7 +818,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "refreshToken": "[REFRESH_TOKEN]"
 }
 ```
 **Código esperado:** 200 OK
@@ -839,7 +839,7 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "refreshToken": "token-invalido"
+    "refreshToken": "[TOKEN_INVÁLIDO]"
 }
 ```
 **Código esperado:** 401 Unauthorized
@@ -894,8 +894,8 @@ Para que el envío de emails funcione correctamente, debes configurar las siguie
 
 ```bash
 # Email Configuration
-EMAIL_USERNAME=tu-email@gmail.com
-EMAIL_PASSWORD=tu-contraseña-de-aplicación
+EMAIL_USERNAME=[TU_EMAIL]
+EMAIL_PASSWORD=[TU_CONTRASEÑA_DE_APLICACIÓN]
 FRONTEND_URL=http://localhost:3000
 ```
 
@@ -1055,8 +1055,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "550e8400-e29b-41d4-a716-446655440000",
-    "newPassword": "NuevaContraseña123!"
+    "token": "[TOKEN_DE_RESET]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 200 OK
@@ -1084,8 +1084,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "550e8400-e29b-41d4-a716-446655440000",
-    "newPassword": "123"
+    "token": "[TOKEN_DE_RESET]",
+    "newPassword": "[CONTRASEÑA_INVÁLIDA]"
 }
 ```
 **Código esperado:** 400 Bad Request
@@ -1114,8 +1114,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "00000000-0000-0000-0000-000000000000",
-    "newPassword": "NuevaContraseña123!"
+    "token": "[TOKEN_INVÁLIDO]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 410 Gone
@@ -1144,8 +1144,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "550e8400-e29b-41d4-a716-446655440000",
-    "newPassword": "NuevaContraseña123!"
+    "token": "[TOKEN_DE_RESET]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 410 Gone
@@ -1175,8 +1175,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "token": "550e8400-e29b-41d4-a716-446655440000",
-    "newPassword": "NuevaContraseña123!"
+    "token": "[TOKEN_DE_RESET]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 410 Gone
@@ -1207,8 +1207,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 **Body:**
 ```json
 {
-    "currentPassword": "Password123",
-    "newPassword": "NuevaContraseña456!"
+    "currentPassword": "[CONTRASEÑA_ACTUAL_VÁLIDA]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 200 OK
@@ -1237,8 +1237,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 **Body:**
 ```json
 {
-    "currentPassword": "WrongPassword123",
-    "newPassword": "NuevaContraseña456!"
+    "currentPassword": "[CONTRASEÑA_INCORRECTA]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 401 Unauthorized
@@ -1268,8 +1268,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 **Body:**
 ```json
 {
-    "currentPassword": "Password123",
-    "newPassword": "Password123"
+    "currentPassword": "[CONTRASEÑA_ACTUAL_VÁLIDA]",
+    "newPassword": "[CONTRASEÑA_ACTUAL_VÁLIDA]"
 }
 ```
 **Código esperado:** 400 Bad Request
@@ -1299,8 +1299,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 **Body:**
 ```json
 {
-    "currentPassword": "Password123",
-    "newPassword": "123"
+    "currentPassword": "[CONTRASEÑA_ACTUAL_VÁLIDA]",
+    "newPassword": "[CONTRASEÑA_INVÁLIDA]"
 }
 ```
 **Código esperado:** 400 Bad Request
@@ -1364,8 +1364,8 @@ Content-Type: application/json
 **Body:**
 ```json
 {
-    "currentPassword": "Password123",
-    "newPassword": "NuevaContraseña456!"
+    "currentPassword": "[CONTRASEÑA_ACTUAL_VÁLIDA]",
+    "newPassword": "[NUEVA_CONTRASEÑA_VÁLIDA]"
 }
 ```
 **Código esperado:** 401 Unauthorized
