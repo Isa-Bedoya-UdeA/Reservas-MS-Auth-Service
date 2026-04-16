@@ -42,7 +42,7 @@
             display: inline-block;
             padding: 12px 30px;
             background-color: #007bff;
-            color: #ffffff;
+            color: #ffffff !important;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
@@ -50,6 +50,10 @@
         }
         .button:hover {
             background-color: #0056b3;
+        }
+        .button a {
+            color: #ffffff !important;
+            text-decoration: none;
         }
         .footer {
             margin-top: 30px;
@@ -91,7 +95,7 @@
         
         <div class="footer">
             <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
-            <p th:text="'© ' + ${#temporals.format(#temporals.now(), 'yyyy')} + ' ' + ${appName}">© 2026 Plataforma de Reservas</p>
+            <p th:text="'© ' + ${#dates.format(#dates.createNow(), 'yyyy')} + ' ' + ${appName}">© 2026 Plataforma de Reservas</p>
         </div>
     </div>
 </body>

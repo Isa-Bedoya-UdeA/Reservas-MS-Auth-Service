@@ -115,6 +115,41 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(InvalidVerificationTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidVerificationTokenException(
+            InvalidVerificationTokenException ex, HttpServletRequest request) {
+        logger.warn("Invalid verification token: {}", ex.getMessage());
+
+        HttpStatus status = ex.isExpired() ? HttpStatus.GONE : HttpStatus.BAD_REQUEST;
+        String error = ex.isExpired() ? "Token Expired" : "Invalid Token";
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(status.value())
+                .error(error)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, status);
+    }
+
+    @ExceptionHandler(org.springframework.web.bind.MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMissingServletRequestParameterException(
+            org.springframework.web.bind.MissingServletRequestParameterException ex, HttpServletRequest request) {
+        logger.warn("Missing request parameter: {}", ex.getMessage());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Missing Parameter")
+                .message("El parámetro '" + ex.getParameterName() + "' es requerido")
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(TokenException.class)
     public ResponseEntity<ErrorResponseDTO> handleTokenException(
             TokenException ex, HttpServletRequest request) {

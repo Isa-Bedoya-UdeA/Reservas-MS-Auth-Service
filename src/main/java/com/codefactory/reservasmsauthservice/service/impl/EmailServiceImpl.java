@@ -26,7 +26,7 @@ public class EmailServiceImpl implements EmailService {
     @Value("${frontend.url}")
     private String frontendUrl;
 
-    @Value("${spring.application.name}")
+    @Value("${platform.name}")
     private String appName;
 
     @Value("${email.username}")

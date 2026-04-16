@@ -2,8 +2,8 @@ package com.codefactory.reservasmsauthservice.service.impl;
 
 import com.codefactory.reservasmsauthservice.entity.EmailVerificationToken;
 import com.codefactory.reservasmsauthservice.entity.User;
+import com.codefactory.reservasmsauthservice.exception.InvalidVerificationTokenException;
 import com.codefactory.reservasmsauthservice.exception.ResourceNotFoundException;
-import com.codefactory.reservasmsauthservice.exception.TokenException;
 import com.codefactory.reservasmsauthservice.repository.EmailVerificationTokenRepository;
 import com.codefactory.reservasmsauthservice.service.EmailVerificationTokenService;
 import lombok.RequiredArgsConstructor;
@@ -49,18 +49,18 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
     @Transactional(readOnly = true)
     public EmailVerificationToken validateToken(String token) {
         return tokenRepository.findValidByToken(token)
-                .orElseThrow(() -> new TokenException("Token de verificación inválido, expirado o ya utilizado"));
+                .orElseThrow(() -> new InvalidVerificationTokenException("Token de verificación inválido, expirado o ya utilizado", true));
     }
 
     @Override
     @Transactional
     public boolean confirmToken(String token) {
         EmailVerificationToken verificationToken = validateToken(token);
-        
+
         if (verificationToken.getUsado()) {
-            throw new TokenException("El token de verificación ya ha sido utilizado");
+            throw new InvalidVerificationTokenException("El token de verificación ya ha sido utilizado", true);
         }
-        
+
         verificationToken.setUsado(true);
         tokenRepository.save(verificationToken);
         return true;
