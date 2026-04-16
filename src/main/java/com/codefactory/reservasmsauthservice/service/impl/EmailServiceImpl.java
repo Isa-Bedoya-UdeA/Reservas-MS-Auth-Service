@@ -61,4 +61,64 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Failed to send verification email: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public void sendPasswordResetEmail(String to, String name, String token) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject("Restablecer tu contraseña - " + appName);
+            helper.setFrom(emailUsername);
+
+            // Prepare Thymeleaf context
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("resetUrl", frontendUrl + "/reset-password?token=" + token);
+            context.setVariable("appName", appName);
+
+            // Process HTML template
+            String htmlContent = templateEngine.process("password-reset", context);
+            helper.setText(htmlContent, true);
+
+            // Send email
+            javaMailSender.send(message);
+            log.info("Password reset email sent successfully to: {}", to);
+
+        } catch (Exception e) {
+            log.error("Failed to send password reset email to: {}", to, e);
+            throw new RuntimeException("Failed to send password reset email: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void sendPasswordChangeConfirmationEmail(String to, String name) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject("Tu contraseña ha sido cambiada - " + appName);
+            helper.setFrom(emailUsername);
+
+            // Prepare Thymeleaf context
+            Context context = new Context();
+            context.setVariable("name", name);
+            context.setVariable("appName", appName);
+            context.setVariable("supportEmail", "soporte@plataformareservas.com");
+
+            // Process HTML template
+            String htmlContent = templateEngine.process("password-change-confirmation", context);
+            helper.setText(htmlContent, true);
+
+            // Send email
+            javaMailSender.send(message);
+            log.info("Password change confirmation email sent successfully to: {}", to);
+
+        } catch (Exception e) {
+            log.error("Failed to send password change confirmation email to: {}", to, e);
+            throw new RuntimeException("Failed to send password change confirmation email: " + e.getMessage(), e);
+        }
+    }
 }

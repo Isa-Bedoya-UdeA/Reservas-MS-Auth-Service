@@ -172,6 +172,11 @@ Reservas-MS-Auth-Service/
 - `POST /api/auth/refresh`: Renovar access token usando refresh token
 - `POST /api/auth/logout`: Cerrar sesión revocando refresh token
 
+### Gestión de Contraseñas
+- `POST /api/auth/password-reset/request`: Solicitar restablecimiento de contraseña (olvidé mi contraseña)
+- `POST /api/auth/password-reset/confirm`: Confirmar restablecimiento de contraseña con token
+- `POST /api/auth/change-password`: Cambiar contraseña (requiere autenticación)
+
 ## Autenticación y Gestión de Sesiones
 
 ### Descripción
@@ -268,6 +273,151 @@ JWT_REFRESH_EXPIRATION=604800000
 LOGIN_MAX_ATTEMPTS=5
 LOGIN_LOCKOUT_DURATION_HOURS=24
 ```
+
+## Gestión de Contraseñas
+
+### Descripción
+
+El sistema proporciona dos funcionalidades para la gestión de contraseñas:
+
+1. **Olvidé mi contraseña (Password Reset)** - Permite a los usuarios recuperar su cuenta cuando olvidan su contraseña, sin necesidad de autenticación.
+2. **Cambiar contraseña (Change Password)** - Permite a los usuarios autenticados cambiar su contraseña actual por una nueva.
+
+Ambas funcionalidades incluyen validaciones de formato de contraseña, envío de correos electrónicos de confirmación y revocación de sesiones activas para mayor seguridad.
+
+### Flujo de "Olvidé mi Contraseña" (Password Reset)
+
+Este flujo permite a los usuarios recuperar su cuenta sin necesidad de autenticación.
+
+1. El usuario solicita el restablecimiento enviando su email al endpoint `/api/auth/password-reset/request`.
+2. El sistema valida que el email existe en la base de datos.
+3. Se invalidan cualquier token de reset existente para ese usuario.
+4. Se genera un nuevo token único (UUID) con expiración de 24 horas.
+5. Se envía un email al usuario con un enlace para restablecer la contraseña: `{frontendUrl}/reset-password?token={token}`.
+6. El usuario hace clic en el enlace y es redirigido al frontend.
+7. El usuario ingresa su nueva contraseña en el formulario.
+8. El usuario envía la nueva contraseña al endpoint `/api/auth/password-reset/confirm` con el token.
+9. El sistema valida que el token sea válido (existe, no usado, no expirado).
+10. El sistema valida que la nueva contraseña cumpla con los requisitos de formato.
+11. Se actualiza la contraseña del usuario con hash BCrypt.
+12. Se marca el token como usado.
+13. Se revocan todos los refresh tokens del usuario (todas las sesiones activas se cierran).
+14. Se envía un email de confirmación al usuario con aviso de seguridad.
+15. El usuario debe iniciar sesión nuevamente con su nueva contraseña.
+
+#### Endpoint: Solicitar Reset
+
+**Request:**
+```bash
+POST /api/auth/password-reset/request
+Content-Type: application/json
+
+{
+  "email": "usuario@ejemplo.com"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña",
+  "success": true,
+  "timestamp": "2026-04-16T16:30:00Z"
+}
+```
+
+#### Endpoint: Confirmar Reset
+
+**Request:**
+```bash
+POST /api/auth/password-reset/confirm
+Content-Type: application/json
+
+{
+  "token": "550e8400-e29b-41d4-a716-446655440000",
+  "newPassword": "NuevaContraseña123!"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Contraseña restablecida exitosamente",
+  "success": true,
+  "timestamp": "2026-04-16T16:35:00Z"
+}
+```
+
+### Flujo de "Cambiar Contraseña" (Change Password)
+
+Este flujo permite a los usuarios autenticados cambiar su contraseña actual por una nueva.
+
+1. El usuario autenticado va a la configuración de su cuenta.
+2. Ingresa su contraseña actual y la nueva contraseña.
+3. Envía la solicitud al endpoint `/api/auth/change-password` con el JWT válido en el header `Authorization`.
+4. El sistema extrae el `userId` del JWT.
+5. El sistema valida que la contraseña actual sea correcta (comparando con el hash almacenado).
+6. El sistema valida que la nueva contraseña cumpla con los requisitos de formato.
+7. El sistema valida que la nueva contraseña sea diferente a la actual.
+8. Se actualiza la contraseña del usuario con hash BCrypt.
+9. Se revocan todos los refresh tokens del usuario (todas las sesiones activas se cierran).
+10. Se envía un email de confirmación al usuario con aviso de seguridad.
+11. El usuario debe iniciar sesión nuevamente con su nueva contraseña.
+
+#### Endpoint: Cambiar Contraseña
+
+**Request:**
+```bash
+POST /api/auth/change-password
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "currentPassword": "ContraseñaActual123!",
+  "newPassword": "NuevaContraseña456!"
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Contraseña cambiada exitosamente",
+  "success": true,
+  "timestamp": "2026-04-16T16:40:00Z"
+}
+```
+
+### Códigos de Error HTTP
+
+| Código | Error | Descripción |
+|--------|-------|-------------|
+| 400 | Bad Request | Email vacío, contraseña no cumple formato, misma contraseña |
+| 401 | Unauthorized | Contraseña actual incorrecta |
+| 404 | Not Found | Email no existe, token no existe |
+| 410 | Gone | Token expirado o ya usado |
+
+### Configuración
+
+Las siguientes propiedades se configuran en `application.properties`:
+
+```properties
+# Password Reset Configuration
+password.reset.token.expiration.hours=${PASSWORD_RESET_TOKEN_EXPIRATION_HOURS:24}
+```
+
+### Variables de Entorno
+
+```bash
+# Configuración de reset de contraseña (opcional)
+PASSWORD_RESET_TOKEN_EXPIRATION_HOURS=24
+```
+
+### Seguridad Adicional
+
+- **Revocación de sesiones:** Al cambiar la contraseña (ambos flujos), se revocan todos los refresh tokens del usuario, cerrando todas las sesiones activas.
+- **Email de confirmación:** Se envía un email de confirmación con aviso de seguridad para detectar cambios no autorizados.
+- **Validación de token:** Los tokens de reset son de un solo uso y expiran después de 24 horas.
+- **Invalidación de tokens antiguos:** Al solicitar un nuevo reset, se invalidan los tokens anteriores del usuario.
 
 ## Relaciones entre Entidades
 

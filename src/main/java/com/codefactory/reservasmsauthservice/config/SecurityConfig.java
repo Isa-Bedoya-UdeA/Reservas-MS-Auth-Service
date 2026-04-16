@@ -1,5 +1,6 @@
 package com.codefactory.reservasmsauthservice.config;
 
+import com.codefactory.reservasmsauthservice.security.JwtAuthenticationEntryPoint;
 import com.codefactory.reservasmsauthservice.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -31,13 +33,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints públicos
                         .requestMatchers("/api/", "/api/version").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
+                        // Endpoints de autenticación públicos (registro, login, refresh, password-reset)
+                        .requestMatchers("/api/auth/register/**").permitAll()
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/refresh").permitAll()
+                        .requestMatchers("/api/auth/password-reset/**").permitAll()
+                        .requestMatchers("/api/auth/verify-email/**").permitAll()
+                        // Endpoints de autenticación que requieren estar autenticado
+                        .requestMatchers("/api/auth/change-password").authenticated()
+                        .requestMatchers("/api/auth/logout").authenticated()
                         .requestMatchers("/error").permitAll()
                         // Todo lo demás requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(authenticationEntryPoint)
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

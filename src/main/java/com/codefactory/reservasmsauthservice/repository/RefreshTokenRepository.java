@@ -40,6 +40,13 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID
     java.util.List<RefreshToken> findByUser_IdUsuario(UUID userId);
 
     /**
+     * Busca tokens de refresco no revocados de un usuario.
+     * @param userId ID del usuario
+     * @return Lista de tokens no revocados
+     */
+    java.util.List<RefreshToken> findByUser_IdUsuarioAndRevocadoFalse(UUID userId);
+
+    /**
      * Elimina los tokens de refresco expirados.
      * @param expiryDate Fecha límite
      */

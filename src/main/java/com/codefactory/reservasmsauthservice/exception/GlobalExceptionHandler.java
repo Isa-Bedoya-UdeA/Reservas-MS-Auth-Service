@@ -214,6 +214,70 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidPasswordException(
+            InvalidPasswordException ex, HttpServletRequest request) {
+        logger.warn("Invalid password format: {}", ex.getMessage());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Invalid Password")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidResetTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidResetTokenException(
+            InvalidResetTokenException ex, HttpServletRequest request) {
+        logger.warn("Invalid reset token: {}", ex.getMessage());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.GONE.value())
+                .error("Invalid Token")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.GONE);
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public ResponseEntity<ErrorResponseDTO> handleIncorrectPasswordException(
+            IncorrectPasswordException ex, HttpServletRequest request) {
+        logger.warn("Incorrect password for path: {}", request.getRequestURI());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error("Unauthorized")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(SamePasswordException.class)
+    public ResponseEntity<ErrorResponseDTO> handleSamePasswordException(
+            SamePasswordException ex, HttpServletRequest request) {
+        logger.warn("Same password attempted for path: {}", request.getRequestURI());
+
+        ErrorResponseDTO errorResponse = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Same Password")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponseDTO> handleBusinessException(
             BusinessException ex, HttpServletRequest request) {

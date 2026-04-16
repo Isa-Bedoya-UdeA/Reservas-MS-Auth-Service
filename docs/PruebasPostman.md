@@ -903,3 +903,488 @@ FRONTEND_URL=http://localhost:3000
 1. Habilita la autenticación de dos pasos en tu cuenta de Google
 2. Genera una contraseña de aplicación en: https://myaccount.google.com/apppasswords
 3. Usa esa contraseña como `EMAIL_PASSWORD`
+
+---
+
+## Gestión de Contraseñas
+
+### Descripción
+
+El sistema de gestión de contraseñas incluye dos funcionalidades principales:
+
+1. **Olvidé mi contraseña (Password Reset)** - Permite a los usuarios recuperar su cuenta cuando olvidan su contraseña, sin necesidad de autenticación.
+2. **Cambiar contraseña (Change Password)** - Permite a los usuarios autenticados cambiar su contraseña actual por una nueva.
+
+**Características importantes:**
+- **Validación de formato:** Las contraseñas deben cumplir con requisitos de complejidad (8 caracteres mínimos, mayúscula, minúscula, número).
+- **Email de confirmación:** Se envían emails de confirmación para detectar cambios no autorizados.
+- **Revocación de sesiones:** Al cambiar la contraseña, se revocan todos los refresh tokens del usuario.
+- **Tokens de un solo uso:** Los tokens de reset expiran en 24 horas y solo pueden usarse una vez.
+
+### Endpoints de Gestión de Contraseñas
+
+## 31. Solicitar Reset de Contraseña - Email Existe (Éxito)
+
+**Nombre:** Password Reset Request - Email Exists
+**URL:** `http://localhost:8081/api/auth/password-reset/request`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "carlos@email.com"
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "message": "Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña",
+    "success": true,
+    "timestamp": "2026-04-16T16:30:00Z"
+}
+```
+**Nota:** Esta prueba enviará un email real a carlos@email.com con el token de reset. El token se puede obtener de la base de datos o del email.
+
+---
+
+## 32. Solicitar Reset de Contraseña - Email No Existe (Info)
+
+**Nombre:** Password Reset Request - Email Not Found
+**URL:** `http://localhost:8081/api/auth/password-reset/request`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "noexiste@email.com"
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "message": "Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña",
+    "success": true,
+    "timestamp": "2026-04-16T16:30:00Z"
+}
+```
+**Nota:** Por seguridad, el sistema siempre retorna 200 OK para no revelar si un email existe o no.
+
+---
+
+## 33. Solicitar Reset de Contraseña - Email Vacío (Validación)
+
+**Nombre:** Password Reset Request - Empty Email
+**URL:** `http://localhost:8081/api/auth/password-reset/request`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": ""
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:30:00Z",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/password-reset/request",
+    "validationErrors": {
+        "email": "El email es requerido"
+    }
+}
+```
+
+---
+
+## 34. Solicitar Reset de Contraseña - Email Inválido (Validación)
+
+**Nombre:** Password Reset Request - Invalid Email
+**URL:** `http://localhost:8081/api/auth/password-reset/request`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "email-invalido"
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:30:00Z",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/password-reset/request",
+    "validationErrors": {
+        "email": "El email debe tener un formato válido"
+    }
+}
+```
+
+---
+
+## 35. Confirmar Reset de Contraseña - Token Válido (Éxito)
+
+**Nombre:** Password Reset Confirm - Valid Token
+**URL:** `http://localhost:8081/api/auth/password-reset/confirm`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "token": "550e8400-e29b-41d4-a716-446655440000",
+    "newPassword": "NuevaContraseña123!"
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "message": "Contraseña restablecida exitosamente",
+    "success": true,
+    "timestamp": "2026-04-16T16:35:00Z"
+}
+```
+**Nota:** El token debe obtenerse de una respuesta de solicitud de reset exitosa (prueba #31) o de la base de datos.
+
+---
+
+## 36. Confirmar Reset de Contraseña - Contraseña Inválida (Validación)
+
+**Nombre:** Password Reset Confirm - Invalid Password
+**URL:** `http://localhost:8081/api/auth/password-reset/confirm`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "token": "550e8400-e29b-41d4-a716-446655440000",
+    "newPassword": "123"
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:35:00Z",
+    "status": 400,
+    "error": "Invalid Password",
+    "message": "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número",
+    "path": "/api/auth/password-reset/confirm"
+}
+```
+
+---
+
+## 37. Confirmar Reset de Contraseña - Token No Existe (Error)
+
+**Nombre:** Password Reset Confirm - Token Not Found
+**URL:** `http://localhost:8081/api/auth/password-reset/confirm`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "token": "00000000-0000-0000-0000-000000000000",
+    "newPassword": "NuevaContraseña123!"
+}
+```
+**Código esperado:** 410 Gone
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:35:00Z",
+    "status": 410,
+    "error": "Invalid Token",
+    "message": "Token de restablecimiento inválido o expirado",
+    "path": "/api/auth/password-reset/confirm"
+}
+```
+
+---
+
+## 38. Confirmar Reset de Contraseña - Token Expirado (Error)
+
+**Nombre:** Password Reset Confirm - Expired Token
+**URL:** `http://localhost:8081/api/auth/password-reset/confirm`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "token": "550e8400-e29b-41d4-a716-446655440000",
+    "newPassword": "NuevaContraseña123!"
+}
+```
+**Código esperado:** 410 Gone
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:35:00Z",
+    "status": 410,
+    "error": "Invalid Token",
+    "message": "Token de restablecimiento inválido o expirado",
+    "path": "/api/auth/password-reset/confirm"
+}
+```
+**Nota:** Esta prueba debe ejecutarse con un token que haya expirado (más de 24 horas después de su creación).
+
+---
+
+## 39. Confirmar Reset de Contraseña - Token Ya Usado (Error)
+
+**Nombre:** Password Reset Confirm - Already Used Token
+**URL:** `http://localhost:8081/api/auth/password-reset/confirm`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "token": "550e8400-e29b-41d4-a716-446655440000",
+    "newPassword": "NuevaContraseña123!"
+}
+```
+**Código esperado:** 410 Gone
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:35:00Z",
+    "status": 410,
+    "error": "Invalid Token",
+    "message": "Token de restablecimiento inválido o expirado",
+    "path": "/api/auth/password-reset/confirm"
+}
+```
+**Nota:** Esta prueba debe ejecutarse DESPUÉS de la prueba #35 (cuando el token ya fue usado).
+
+---
+
+## 40. Cambiar Contraseña - Exitoso (Autenticado)
+
+**Nombre:** Change Password - Success
+**URL:** `http://localhost:8081/api/auth/change-password`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "currentPassword": "Password123",
+    "newPassword": "NuevaContraseña456!"
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "message": "Contraseña cambiada exitosamente",
+    "success": true,
+    "timestamp": "2026-04-16T16:40:00Z"
+}
+```
+**Nota:** El access token debe obtenerse de una respuesta de login exitosa (prueba #17 o #18).
+
+---
+
+## 41. Cambiar Contraseña - Contraseña Actual Incorrecta (Error)
+
+**Nombre:** Change Password - Wrong Current Password
+**URL:** `http://localhost:8081/api/auth/change-password`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "currentPassword": "WrongPassword123",
+    "newPassword": "NuevaContraseña456!"
+}
+```
+**Código esperado:** 401 Unauthorized
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:40:00Z",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "La contraseña actual es incorrecta",
+    "path": "/api/auth/change-password"
+}
+```
+
+---
+
+## 42. Cambiar Contraseña - Nueva Contraseña Igual a Actual (Error)
+
+**Nombre:** Change Password - Same Password
+**URL:** `http://localhost:8081/api/auth/change-password`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "currentPassword": "Password123",
+    "newPassword": "Password123"
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:40:00Z",
+    "status": 400,
+    "error": "Same Password",
+    "message": "La nueva contraseña debe ser diferente a la actual",
+    "path": "/api/auth/change-password"
+}
+```
+
+---
+
+## 43. Cambiar Contraseña - Nueva Contraseña Inválida (Validación)
+
+**Nombre:** Change Password - Invalid New Password
+**URL:** `http://localhost:8081/api/auth/change-password`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "currentPassword": "Password123",
+    "newPassword": "123"
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:40:00Z",
+    "status": 400,
+    "error": "Invalid Password",
+    "message": "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número",
+    "path": "/api/auth/change-password"
+}
+```
+
+---
+
+## 44. Cambiar Contraseña - Campos Vacíos (Validación)
+
+**Nombre:** Change Password - Empty Fields
+**URL:** `http://localhost:8081/api/auth/change-password`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "currentPassword": "",
+    "newPassword": ""
+}
+```
+**Código esperado:** 400 Bad Request
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:40:00Z",
+    "status": 400,
+    "error": "Validation Error",
+    "message": "Errores de validación en los datos de entrada",
+    "path": "/api/auth/change-password",
+    "validationErrors": {
+        "currentPassword": "La contraseña actual es requerida",
+        "newPassword": "La nueva contraseña es requerida"
+    }
+}
+```
+
+---
+
+## 45. Cambiar Contraseña - Sin Autenticación (Error)
+
+**Nombre:** Change Password - No Authentication
+**URL:** `http://localhost:8081/api/auth/change-password`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "currentPassword": "Password123",
+    "newPassword": "NuevaContraseña456!"
+}
+```
+**Código esperado:** 401 Unauthorized
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T16:40:00Z",
+    "status": 401,
+    "error": "Unauthorized",
+    "message": "No estás autenticado",
+    "path": "/api/auth/change-password"
+}
+```
+
+---
+
+### Notas Importantes
+
+- **Obtención de tokens de reset:** Los tokens de reset se pueden obtener de los emails enviados o directamente de la base de datos en la tabla `token_reset_password`.
+- **Revocación de sesiones:** Después de cambiar la contraseña (pruebas #35, #40), todos los refresh tokens del usuario son revocados. Deberás hacer login nuevamente para obtener un nuevo access token.
+- **Emails de confirmación:** Las pruebas exitosas de reset y cambio de contraseña envían emails de confirmación a los usuarios.
+- **Formato de contraseña:** El sistema requiere que las contraseñas tengan al menos 8 caracteres, una mayúscula, una minúscula, y un número.

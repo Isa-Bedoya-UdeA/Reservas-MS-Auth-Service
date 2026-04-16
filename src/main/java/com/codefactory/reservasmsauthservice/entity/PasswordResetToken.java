@@ -1,8 +1,11 @@
 package com.codefactory.reservasmsauthservice.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,6 +18,9 @@ import java.util.UUID;
 @Table(name = "token_reset_password")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PasswordResetToken {
 
     @Id

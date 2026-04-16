@@ -17,6 +17,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
 
+    // Methods to get user names for email personalization
+    @Query("SELECT c.nombre FROM Client c WHERE c.idUsuario = :userId")
+    Optional<String> findClientNameByUserId(@Param("userId") UUID userId);
+
+    @Query("SELECT p.nombreComercial FROM Provider p WHERE p.idUsuario = :userId")
+    Optional<String> findProviderNameByUserId(@Param("userId") UUID userId);
+
     // Native queries to call RLS bypass functions (SECURITY DEFINER)
     // Using PERFORM instead of SELECT for void functions
     @Modifying

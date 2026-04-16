@@ -17,6 +17,6 @@ public class Client extends User {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column
     private String telefono;
 }
