@@ -137,7 +137,12 @@ public class PasswordServiceImpl implements PasswordService {
         String newPassword = request.getNewPassword();
 
         // Get authenticated user email from SecurityContext
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getName().equals("anonymousUser")) {
+            throw new org.springframework.security.authentication.AuthenticationCredentialsNotFoundException("No estás autenticado");
+        }
+
+        String email = authentication.getName();
 
         // Find user by email
         User user = userRepository.findByEmail(email)

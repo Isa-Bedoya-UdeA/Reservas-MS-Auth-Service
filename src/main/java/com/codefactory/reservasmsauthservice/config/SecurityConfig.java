@@ -39,6 +39,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/refresh").permitAll()
                         .requestMatchers("/api/auth/password-reset/**").permitAll()
                         .requestMatchers("/api/auth/verify-email/**").permitAll()
+                        // Swagger/OpenAPI - Documentación pública
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-resources/**").permitAll()
+                        .requestMatchers("/webjars/**").permitAll()
+                        .requestMatchers("/configuration/**").permitAll()
                         // Endpoints de autenticación que requieren estar autenticado
                         .requestMatchers("/api/auth/change-password").authenticated()
                         .requestMatchers("/api/auth/logout").authenticated()
