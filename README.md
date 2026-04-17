@@ -452,8 +452,9 @@ PASSWORD_RESET_TOKEN_EXPIRATION_HOURS=24
 (Pendiente)
 
 ### Documentación de API (Swagger/OpenAPI)
-[docs/swagger.png]
-(Pendiente)
+![Swagger](docs/swagger.png)
+
+**Ruta de acceso:** http://localhost:8081/swagger-ui/index.html#/
 
 ### Variables de Entorno para Despliegue
 [docs/environment-variables.md]
