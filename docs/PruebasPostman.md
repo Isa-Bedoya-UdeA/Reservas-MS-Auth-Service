@@ -1382,9 +1382,371 @@ Content-Type: application/json
 
 ---
 
+## Gestión de Administradores
+
+### Descripción
+
+El sistema de gestión de administradores permite crear, consultar, actualizar, desactivar y reactivar cuentas de administradores. Los administradores tienen acceso completo al sistema y pueden gestionar todos los usuarios (clientes, proveedores y otros administradores).
+
+**Características importantes:**
+- **Rol exclusivo:** Solo usuarios con rol ADMIN pueden acceder a estos endpoints.
+- **Seguimiento de creador:** Cada administrador tiene un campo `creadoPor` que indica quién lo creó.
+- **Soft delete:** Los administradores se desactivan en lugar de eliminarse físicamente.
+- **Código de empleado:** Los administradores pueden tener un código de empleado opcional.
+- **Estado activo:** Los administradores tienen un estado `activo` que puede ser true o false.
+
+### Endpoints de Gestión de Administradores
+
+## 46. Inicializar Primer Administrador (Éxito)
+
+**Nombre:** Initialize First Admin - Success
+**URL:** `http://localhost:8081/api/auth/admins/initialize`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "admin@empresa.com",
+    "password": "[CONTRASEÑA_VÁLIDA]",
+    "nombreCompleto": "Admin Principal",
+    "telefono": "3001234567",
+    "codigoEmpleado": "ADM001"
+}
+```
+**Código esperado:** 201 Created
+**Response esperado:**
+```json
+{
+    "idUsuario": "[UUID_DEL_ADMIN]",
+    "email": "admin@empresa.com",
+    "tipoUsuario": "ADMIN",
+    "estado": "ACTIVO",
+    "fechaRegistro": "2026-04-16T10:00:00",
+    "nombreCompleto": "Admin Principal",
+    "codigoEmpleado": "ADM001",
+    "telefono": "3001234567",
+    "fechaAsignacion": "2026-04-16T10:00:00",
+    "activo": true,
+    "creadoPor": null
+}
+```
+**Nota:** Este endpoint es público y solo funciona cuando NO existen administradores en la base de datos. Una vez creado el primer admin, este endpoint ya no funcionará y deberás usar el endpoint regular de creación con autenticación.
+
+---
+
+## 47. Inicializar Primer Administrador - Ya Existen Admins (Error)
+
+**Nombre:** Initialize First Admin - Admins Already Exist
+**URL:** `http://localhost:8081/api/auth/admins/initialize`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+```
+**Body:**
+```json
+{
+    "email": "admin2@empresa.com",
+    "password": "[CONTRASEÑA_VÁLIDA]",
+    "nombreCompleto": "Admin Secundario",
+    "telefono": "3007654321"
+}
+```
+**Código esperado:** 409 Conflict
+**Response esperado:**
+```json
+{
+    "status": 409,
+    "error": "Conflict",
+    "message": "Ya existen administradores en el sistema. Use el endpoint de creación regular."
+}
+```
+**Nota:** Esta prueba debe ejecutarse DESPUÉS de la prueba #46 (cuando ya existe al menos un admin).
+
+---
+
+## 48. Crear Administrador Exitoso
+
+**Nombre:** Create Admin - Success
+**URL:** `http://localhost:8081/api/auth/admins?creadoPor=[UUID_ADMIN_CREADOR]`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "email": "admin2@empresa.com",
+    "password": "[CONTRASEÑA_VÁLIDA]",
+    "nombreCompleto": "Admin Secundario",
+    "telefono": "3007654321",
+    "codigoEmpleado": "ADM002"
+}
+```
+**Código esperado:** 201 Created
+**Response esperado:**
+```json
+{
+    "idUsuario": "[UUID_DEL_ADMIN]",
+    "email": "admin2@empresa.com",
+    "tipoUsuario": "ADMIN",
+    "estado": "ACTIVO",
+    "fechaRegistro": "2026-04-16T11:00:00",
+    "nombreCompleto": "Admin Secundario",
+    "codigoEmpleado": "ADM002",
+    "telefono": "3007654321",
+    "fechaAsignacion": "2026-04-16T11:00:00",
+    "activo": true,
+    "creadoPor": "[UUID_ADMIN_CREADOR]"
+}
+```
+**Nota:** El access token debe ser de un usuario con rol ADMIN. El parámetro `creadoPor` debe ser el UUID del admin que está creando el nuevo admin.
+
+---
+
+## 49. Crear Administrador con Email Ya Existente
+
+**Nombre:** Create Admin - Email Already Exists
+**URL:** `http://localhost:8081/api/auth/admins?creadoPor=[UUID_ADMIN_CREADOR]`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "email": "admin@empresa.com",
+    "password": "[CONTRASEÑA_VÁLIDA]",
+    "nombreCompleto": "Admin Principal",
+    "telefono": "3001234567"
+}
+```
+**Código esperado:** 409 Conflict
+**Response esperado:**
+```json
+{
+    "status": 409,
+    "error": "Conflict",
+    "message": "El correo electrónico ya está en uso"
+}
+```
+
+---
+
+## 50. Obtener Todos los Administradores
+
+**Nombre:** Get All Admins - Success
+**URL:** `http://localhost:8081/api/auth/admins`
+**Método:** GET
+**Headers:**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:** (vacío)
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+[
+    {
+        "idUsuario": "[UUID_ADMIN_1]",
+        "email": "admin@empresa.com",
+        "tipoUsuario": "ADMIN",
+        "estado": "ACTIVO",
+        "fechaRegistro": "2026-04-16T10:00:00",
+        "nombreCompleto": "Admin Principal",
+        "codigoEmpleado": "ADM001",
+        "telefono": "3001234567",
+        "fechaAsignacion": "2026-04-16T10:00:00",
+        "activo": true,
+        "creadoPor": null
+    },
+    {
+        "idUsuario": "[UUID_ADMIN_2]",
+        "email": "admin2@empresa.com",
+        "tipoUsuario": "ADMIN",
+        "estado": "ACTIVO",
+        "fechaRegistro": "2026-04-16T11:00:00",
+        "nombreCompleto": "Admin Secundario",
+        "codigoEmpleado": "ADM002",
+        "telefono": "3007654321",
+        "fechaAsignacion": "2026-04-16T11:00:00",
+        "activo": true,
+        "creadoPor": "[UUID_ADMIN_CREADOR]"
+    }
+]
+```
+**Nota:** El access token debe ser de un usuario con rol ADMIN.
+
+---
+
+## 51. Obtener Administrador por ID
+
+**Nombre:** Get Admin by ID - Success
+**URL:** `http://localhost:8081/api/auth/admins/[UUID_ADMIN]`
+**Método:** GET
+**Headers:**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:** (vacío)
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "idUsuario": "[UUID_ADMIN]",
+    "email": "admin@empresa.com",
+    "tipoUsuario": "ADMIN",
+    "estado": "ACTIVO",
+    "fechaRegistro": "2026-04-16T10:00:00",
+    "nombreCompleto": "Admin Principal",
+    "codigoEmpleado": "ADM001",
+    "telefono": "3001234567",
+    "fechaAsignacion": "2026-04-16T10:00:00",
+    "activo": true,
+    "creadoPor": null
+}
+```
+
+---
+
+## 52. Obtener Administrador por ID - No Encontrado
+
+**Nombre:** Get Admin by ID - Not Found
+**URL:** `http://localhost:8081/api/auth/admins/[UUID_INEXISTENTE]`
+**Método:** GET
+**Headers:**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:** (vacío)
+**Código esperado:** 404 Not Found
+**Response esperado:**
+```json
+{
+    "status": 404,
+    "error": "Not Found",
+    "message": "Administrador con ID '[UUID_INEXISTENTE]' no encontrado"
+}
+```
+
+---
+
+## 53. Actualizar Administrador
+
+**Nombre:** Update Admin - Success
+**URL:** `http://localhost:8081/api/auth/admins/[UUID_ADMIN]`
+**Método:** PUT
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "nombreCompleto": "Admin Principal Actualizado",
+    "telefono": "3009998888",
+    "codigoEmpleado": "ADM001-UPD",
+    "activo": true
+}
+```
+**Código esperado:** 200 OK
+**Response esperado:**
+```json
+{
+    "idUsuario": "[UUID_ADMIN]",
+    "email": "admin@empresa.com",
+    "tipoUsuario": "ADMIN",
+    "estado": "ACTIVO",
+    "fechaRegistro": "2026-04-16T10:00:00",
+    "nombreCompleto": "Admin Principal Actualizado",
+    "codigoEmpleado": "ADM001-UPD",
+    "telefono": "3009998888",
+    "fechaAsignacion": "2026-04-16T10:00:00",
+    "activo": true,
+    "creadoPor": null
+}
+```
+
+---
+
+## 54. Desactivar Administrador (Soft Delete)
+
+**Nombre:** Deactivate Admin - Success
+**URL:** `http://localhost:8081/api/auth/admins/[UUID_ADMIN]`
+**Método:** DELETE
+**Headers:**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:** (vacío)
+**Código esperado:** 204 No Content
+**Response esperado:** (vacío)
+**Nota:** El admin se marca como inactivo en la base de datos pero no se elimina físicamente.
+
+---
+
+## 55. Activar Administrador
+
+**Nombre:** Activate Admin - Success
+**URL:** `http://localhost:8081/api/auth/admins/[UUID_ADMIN]/activate`
+**Método:** PATCH
+**Headers:**
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:** (vacío)
+**Código esperado:** 204 No Content
+**Response esperado:** (vacío)
+**Nota:** Reactiva un administrador que fue desactivado anteriormente.
+
+---
+
+## 56. Crear Administrador - Sin Rol ADMIN (Forbidden)
+
+**Nombre:** Create Admin - Forbidden (No Admin Role)
+**URL:** `http://localhost:8081/api/auth/admins?creadoPor=[UUID_ADMIN_CREADOR]`
+**Método:** POST
+**Headers:**
+```
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+**Body:**
+```json
+{
+    "email": "admin@empresa.com",
+    "password": "[CONTRASEÑA_VÁLIDA]",
+    "nombreCompleto": "Admin Principal",
+    "telefono": "3001234567"
+}
+```
+**Código esperado:** 403 Forbidden
+**Response esperado:**
+```json
+{
+    "timestamp": "2026-04-16T10:00:00",
+    "status": 403,
+    "error": "Forbidden",
+    "message": "No tienes permisos para acceder a este recurso",
+    "path": "/api/auth/admins"
+}
+```
+**Nota:** El access token debe ser de un usuario con rol diferente a ADMIN (CLIENTE o PROVEEDOR).
+
+---
+
 ### Notas Importantes
 
 - **Obtención de tokens de reset:** Los tokens de reset se pueden obtener de los emails enviados o directamente de la base de datos en la tabla `token_reset_password`.
 - **Revocación de sesiones:** Después de cambiar la contraseña (pruebas #35, #40), todos los refresh tokens del usuario son revocados. Deberás hacer login nuevamente para obtener un nuevo access token.
 - **Emails de confirmación:** Las pruebas exitosas de reset y cambio de contraseña envían emails de confirmación a los usuarios.
 - **Formato de contraseña:** El sistema requiere que las contraseñas tengan al menos 8 caracteres, una mayúscula, una minúscula, y un número.
+- **Permisos de administrador:** Todos los endpoints de administración requieren que el usuario tenga rol ADMIN. Los usuarios con roles CLIENTE o PROVEEDOR recibirán un error 403 Forbidden al intentar acceder a estos endpoints.

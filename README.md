@@ -177,9 +177,16 @@ Reservas-MS-Auth-Service/
 - `POST /api/auth/password-reset/confirm`: Confirmar restablecimiento de contraseña con token
 - `POST /api/auth/change-password`: Cambiar contraseña (requiere autenticación)
 
-## Autenticación y Gestión de Sesiones
+### Gestión de Administradores (Solo rol ADMIN)
+- `POST /api/auth/admins/initialize`: Inicializar primer administrador (público, solo funciona cuando no existen admins)
+- `POST /api/auth/admins?creadoPor={UUID}`: Crear nuevo administrador
+- `GET /api/auth/admins`: Obtener todos los administradores
+- `GET /api/auth/admins/{id}`: Obtener administrador por ID
+- `PUT /api/auth/admins/{id}`: Actualizar administrador
+- `DELETE /api/auth/admins/{id}`: Desactivar administrador (soft delete)
+- `PATCH /api/auth/admins/{id}/activate`: Reactivar administrador
 
-### Descripción
+## Autenticación y Gestión de Sesiones
 
 El sistema implementa autenticación basada en JWT (JSON Web Tokens) con un mecanismo de refresh tokens para mantener sesiones activas de forma segura. La autenticación incluye medidas de seguridad como límite de intentos fallidos, bloqueo temporal de cuentas y auditoría de intentos de login.
 

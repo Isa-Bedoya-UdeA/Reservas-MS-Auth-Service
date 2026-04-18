@@ -45,7 +45,7 @@ public class User {
     private Role tipoUsuario;
 
     public enum Role {
-        CLIENTE, PROVEEDOR
+        CLIENTE, PROVEEDOR, ADMIN
     }
 
     @PrePersist
