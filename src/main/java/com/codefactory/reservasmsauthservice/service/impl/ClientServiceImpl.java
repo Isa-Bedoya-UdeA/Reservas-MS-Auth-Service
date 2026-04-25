@@ -1,5 +1,6 @@
 package com.codefactory.reservasmsauthservice.service.impl;
 
+import com.codefactory.reservasmsauthservice.dto.external.ExternalClientDTO;
 import com.codefactory.reservasmsauthservice.dto.request.CreateClientRequestDTO;
 import com.codefactory.reservasmsauthservice.dto.response.ClientResponseDTO;
 import com.codefactory.reservasmsauthservice.entity.Client;
@@ -12,6 +13,8 @@ import com.codefactory.reservasmsauthservice.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +43,18 @@ public class ClientServiceImpl implements ClientService {
     public User getUserEntityByEmail(String email) {
         return clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente con email '" + email + "' no encontrado"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ExternalClientDTO getExternalClientById(UUID id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente con ID '" + id + "' no encontrado"));
+        return ExternalClientDTO.builder()
+                .nombre(client.getNombre())
+                .email(client.getEmail())
+                .telefono(client.getTelefono())
+                .emailVerificado(client.getEmailVerificado())
+                .build();
     }
 }

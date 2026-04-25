@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -31,6 +32,14 @@ public class JwtServiceImpl implements JwtService {
     public String generateToken(String email, String role) {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("role", role);
+        return buildToken(extraClaims, email, jwtExpiration);
+    }
+
+    @Override
+    public String generateToken(String email, String role, UUID userId) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", role);
+        extraClaims.put("userId", userId.toString());
         return buildToken(extraClaims, email, jwtExpiration);
     }
 

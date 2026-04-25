@@ -177,7 +177,7 @@ public class LoginServiceImpl implements LoginService {
         log.info("Successful login for user: {}", email);
 
         // Generar tokens
-        String accessToken = jwtService.generateToken(user.getEmail(), user.getTipoUsuario().name());
+        String accessToken = jwtService.generateToken(user.getEmail(), user.getTipoUsuario().name(), user.getIdUsuario());
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
 
         // Guardar refresh token en DB
@@ -213,7 +213,7 @@ public class LoginServiceImpl implements LoginService {
         User user = refreshTokenEntity.getUser();
 
         // Generar nuevo access token
-        String newAccessToken = jwtService.generateToken(user.getEmail(), user.getTipoUsuario().name());
+        String newAccessToken = jwtService.generateToken(user.getEmail(), user.getTipoUsuario().name(), user.getIdUsuario());
 
         // Rotar refresh token (opcional - crear nuevo y revocar antiguo)
         String newRefreshToken = jwtService.generateRefreshToken(user.getEmail());

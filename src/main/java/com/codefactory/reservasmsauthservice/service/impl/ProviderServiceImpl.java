@@ -1,6 +1,7 @@
 package com.codefactory.reservasmsauthservice.service.impl;
 
 import com.codefactory.reservasmsauthservice.client.CatalogClient;
+import com.codefactory.reservasmsauthservice.dto.external.ExternalProviderDTO;
 import com.codefactory.reservasmsauthservice.dto.request.CreateProviderRequestDTO;
 import com.codefactory.reservasmsauthservice.dto.response.CategoryResponseDTO;
 import com.codefactory.reservasmsauthservice.dto.response.ProviderResponseDTO;
@@ -16,6 +17,8 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +58,19 @@ public class ProviderServiceImpl implements ProviderService {
     public User getUserEntityByEmail(String email) {
         return providerRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Proveedor con email '" + email + "' no encontrado"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ExternalProviderDTO getExternalProviderById(UUID id) {
+        Provider provider = providerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Proveedor con ID '" + id + "' no encontrado"));
+        return ExternalProviderDTO.builder()
+                .nombreComercial(provider.getNombreComercial())
+                .email(provider.getEmail())
+                .telefonoContacto(provider.getTelefonoContacto())
+                .idCategoria(provider.getIdCategoria())
+                .direccion(provider.getDireccion())
+                .build();
     }
 }
