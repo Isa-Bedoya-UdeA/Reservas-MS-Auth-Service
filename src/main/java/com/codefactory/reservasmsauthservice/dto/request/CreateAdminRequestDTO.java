@@ -10,7 +10,7 @@ import lombok.Data;
 public class CreateAdminRequestDTO {
 
     @NotBlank(message = "El email no puede estar vacío")
-    @Email(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "El formato del email es inválido")
+    @Email(message = "El formato del email es inválido")
     private String email;
 
     @NotBlank(message = "La contraseña no puede estar vacía")

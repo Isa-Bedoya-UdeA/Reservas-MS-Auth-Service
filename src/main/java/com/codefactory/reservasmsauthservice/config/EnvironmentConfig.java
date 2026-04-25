@@ -15,6 +15,8 @@ import org.springframework.core.env.Environment;
 public class EnvironmentConfig implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(EnvironmentConfig.class);
+    private static final String PASSWORD_PATTERN = "password=[^&]*";
+    private static final String PASSWORD_MASK = "password=***";
 
     private final Environment env;
 
@@ -64,6 +66,6 @@ public class EnvironmentConfig implements CommandLineRunner {
             return url;
         }
         // Mask password if present in URL (rarely used with separate credentials, but just in case)
-        return url.replaceAll("password=[^&]*", "password=***");
+        return url.replaceAll(PASSWORD_PATTERN, PASSWORD_MASK);
     }
 }
