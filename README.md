@@ -435,6 +435,9 @@ PASSWORD_RESET_TOKEN_EXPIRATION_HOURS=24
 
 ## Diagramas
 
+### Diseño Arquitectonico
+![Diseño Arquitectonico](docs/architecture.png)
+
 ### Diagrama de Paquetes y Componentes
 ![Paquetes y Componentes](docs/components.png)
 
