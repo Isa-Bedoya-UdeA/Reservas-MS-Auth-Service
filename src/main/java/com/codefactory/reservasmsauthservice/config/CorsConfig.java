@@ -24,7 +24,9 @@ public class CorsConfig {
         config.setAllowedOrigins(Arrays.asList(
                 frontendUrl,
                 "http://localhost:3000",
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "http://localhost:4200",
+                "https://front-code-factory-2026-1-caso-15-henna.vercel.app"
         ));
         config.setAllowedHeaders(Arrays.asList(
                 "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
