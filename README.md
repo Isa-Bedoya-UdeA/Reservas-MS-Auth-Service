@@ -461,6 +461,12 @@ Para configurar el despliegue del microservicio, consulta la documentación deta
 También puedes usar el archivo de ejemplo como plantilla:
 **[.env.example](.env.example)** - Copia este archivo a `.env` y configura tus valores.
 
+## Secrets para Kubernetes
+
+Para el despliegue en Kubernetes, consulta la documentación de secrets:
+
+**[docs/kubernetes-secrets.md](docs/kubernetes-secrets.md)**
+
 ## Pruebas en Postman
 
 Para ver todos los ejemplos de pruebas en Postman, incluyendo registro de usuarios y verificación de email, consulta el archivo: **[docs/PruebasPostman.md](docs/PruebasPostman.md)**
