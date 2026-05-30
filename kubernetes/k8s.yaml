@@ -28,8 +28,8 @@ spec:
     spec:
       containers:
         - name: auth-service
-          image: reservas-ms-auth-service:latest
-          imagePullPolicy: Never
+          image: isabedoya/reservas-ms-auth-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           env:
