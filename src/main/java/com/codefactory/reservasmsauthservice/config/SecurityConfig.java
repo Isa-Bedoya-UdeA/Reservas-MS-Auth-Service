@@ -47,6 +47,8 @@ public class SecurityConfig {
                                                 .requestMatchers("/swagger-resources/**").permitAll()
                                                 .requestMatchers("/webjars/**").permitAll()
                                                 .requestMatchers("/configuration/**").permitAll()
+                                                // Actuator endpoints para Prometheus (no exponer en prod)
+                                                .requestMatchers("/actuator/**").permitAll()
 
                                                 // Endpoints de administración - Solo rol ADMIN
                                                 .requestMatchers("/api/auth/admins/initialize").permitAll()
