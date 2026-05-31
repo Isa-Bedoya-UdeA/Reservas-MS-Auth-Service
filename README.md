@@ -471,6 +471,10 @@ Para el despliegue en Kubernetes, consulta la documentación de secrets:
 
 **[docs/observability.md](docs/observability.md)** — Guía paso a paso para desplegar y monitorear el microservicio.
 
+## HATEOAS
+
+**[docs/hateoas.md](docs/hateoas.md)** — Implementación de HATEOAS (Hypermedia as the Engine of Application State) con enlaces `_links` en todas las respuestas REST para navegación discoverable.
+
 ## Pruebas en Postman
 
 Para ver todos los ejemplos de pruebas en Postman, incluyendo registro de usuarios y verificación de email, consulta el archivo: **[docs/PruebasPostman.md](docs/PruebasPostman.md)**
