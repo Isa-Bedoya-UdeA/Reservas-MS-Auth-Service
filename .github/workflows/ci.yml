@@ -31,7 +31,7 @@ jobs:
       - name: Compilar MS-Auth-Service
         run: mvn compile --no-transfer-progress
 
-      - name: Ejecutar pruebas + cobertura + validar Quality Gate (>= 40%)
+      - name: Ejecutar pruebas + cobertura + validar Quality Gate (>= 50%)
         run: mvn verify --no-transfer-progress
         env:
           SPRING_PROFILES_ACTIVE: test
