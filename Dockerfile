@@ -8,5 +8,5 @@ RUN mvn clean package -DskipTests -Dmaven.compiler.release=17
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /app/target/reservas-ms-auth-service.jar reservas-ms-auth-service.jar
-EXPOSE 8081
+EXPOSE 10000
 ENTRYPOINT ["java", "-jar", "reservas-ms-auth-service.jar"]
